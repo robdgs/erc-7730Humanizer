@@ -4,6 +4,8 @@
   "scripts": {
     "node": "hardhat node",
     "deploy": "hardhat run scripts/deploy.ts --network localhost",
+    "deploy:arbitrum": "hardhat run scripts/deploy.ts --network arbitrum",
+    "deploy:arbitrum-sepolia": "hardhat run scripts/deploy.ts --network arbitrumSepolia",
     "deploy:mainnet-fork": "hardhat run scripts/deploy.ts --network hardhat",
     "test": "hardhat test",
     "generate-descriptor": "hardhat run scripts/generate-descriptor.ts",
@@ -13,6 +15,7 @@
   "devDependencies": {
     "@nomicfoundation/hardhat-ethers": "^4.0.0",
     "@types/node": "^20.0.0",
+    "dotenv": "^17.2.3",
     "hardhat": "^3.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"

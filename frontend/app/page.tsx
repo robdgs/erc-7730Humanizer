@@ -1,4 +1,5 @@
 import CalldataDecoder from '@/components/CalldataDecoder'
+import Link from 'next/link'
 
 export default function Home() {
   return (
@@ -11,9 +12,15 @@ export default function Home() {
           <p className="text-xl text-gray-600 mb-2">
             Human-readable transaction signing for any dApp
           </p>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 mb-4">
             Built with Hardhat 3 • Next.js 14 • TypeScript
           </p>
+          <Link 
+            href="/sign"
+            className="inline-block px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold rounded-lg transition-all"
+          >
+            🔐 Try Hardware Signing
+          </Link>
         </div>
 
         <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">

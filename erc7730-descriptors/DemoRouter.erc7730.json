@@ -1,0 +1,203 @@
+{
+  "$schema": "https://github.com/LedgerHQ/clear-signing-erc7730-registry/blob/master/specs/erc7730-v1.schema.json",
+  "context": {
+    "contract": {
+      "abi": "DemoRouter",
+      "deployments": [
+        {
+          "chainId": 1,
+          "address": "0x0000000000000000000000000000000000000000"
+        },
+        {
+          "chainId": 31337,
+          "address": "0x0000000000000000000000000000000000000000"
+        }
+      ]
+    }
+  },
+  "metadata": {
+    "owner": "Demo Protocol",
+    "info": {
+      "url": "https://github.com/robdgs/erc-7730Humanizer",
+      "legalName": "DemoRouter Protocol",
+      "lastUpdate": "2024-11-22"
+    },
+    "constants": {
+      "USDC_ADDRESS": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "USDT_ADDRESS": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+      "DAI_ADDRESS": "0x6B175474E89094C44Da98b954EedeAC495271d0F"
+    }
+  },
+  "display": {
+    "formats": {
+      "tokenAmount": {
+        "type": "amount",
+        "denomination": "wei"
+      },
+      "tokenAddress": {
+        "type": "address",
+        "prefix": "Token: "
+      },
+      "recipientAddress": {
+        "type": "address",
+        "prefix": "Recipient: "
+      },
+      "timestamp": {
+        "type": "date",
+        "encoding": "timestamp"
+      }
+    },
+    "definitions": {
+      "SwapParams": {
+        "fields": [
+          {
+            "path": "tokenIn",
+            "label": "Token In",
+            "format": "tokenAddress"
+          },
+          {
+            "path": "tokenOut",
+            "label": "Token Out",
+            "format": "tokenAddress"
+          },
+          {
+            "path": "amountIn",
+            "label": "Amount In",
+            "format": "tokenAmount"
+          },
+          {
+            "path": "minAmountOut",
+            "label": "Minimum Amount Out",
+            "format": "tokenAmount"
+          },
+          {
+            "path": "recipient",
+            "label": "Recipient",
+            "format": "recipientAddress"
+          },
+          {
+            "path": "deadline",
+            "label": "Deadline",
+            "format": "timestamp"
+          }
+        ]
+      },
+      "LiquidityParams": {
+        "fields": [
+          {
+            "path": "tokenA",
+            "label": "Token A",
+            "format": "tokenAddress"
+          },
+          {
+            "path": "tokenB",
+            "label": "Token B",
+            "format": "tokenAddress"
+          },
+          {
+            "path": "amountA",
+            "label": "Amount A",
+            "format": "tokenAmount"
+          },
+          {
+            "path": "amountB",
+            "label": "Amount B",
+            "format": "tokenAmount"
+          },
+          {
+            "path": "recipient",
+            "label": "Recipient",
+            "format": "recipientAddress"
+          },
+          {
+            "path": "deadline",
+            "label": "Deadline",
+            "format": "timestamp"
+          }
+        ]
+      }
+    }
+  },
+  "messages": {
+    "swapExactTokensForTokens": {
+      "intent": "Swap tokens",
+      "fields": [
+        {
+          "path": "params",
+          "label": "Swap Details",
+          "nested": "SwapParams"
+        }
+      ]
+    },
+    "addLiquidity": {
+      "intent": "Add liquidity to pool",
+      "fields": [
+        {
+          "path": "params",
+          "label": "Liquidity Details",
+          "nested": "LiquidityParams"
+        }
+      ]
+    },
+    "removeLiquidity": {
+      "intent": "Remove liquidity from pool",
+      "fields": [
+        {
+          "path": "tokenA",
+          "label": "Token A",
+          "format": "tokenAddress"
+        },
+        {
+          "path": "tokenB",
+          "label": "Token B",
+          "format": "tokenAddress"
+        },
+        {
+          "path": "liquidity",
+          "label": "Liquidity Amount",
+          "format": "tokenAmount"
+        },
+        {
+          "path": "minAmountA",
+          "label": "Minimum Amount A",
+          "format": "tokenAmount"
+        },
+        {
+          "path": "minAmountB",
+          "label": "Minimum Amount B",
+          "format": "tokenAmount"
+        },
+        {
+          "path": "recipient",
+          "label": "Recipient",
+          "format": "recipientAddress"
+        },
+        {
+          "path": "deadline",
+          "label": "Deadline",
+          "format": "timestamp"
+        }
+      ]
+    },
+    "simpleTransfer": {
+      "intent": "Transfer tokens",
+      "fields": [
+        {
+          "path": "token",
+          "label": "Token",
+          "format": "tokenAddress"
+        },
+        {
+          "path": "recipient",
+          "label": "Recipient",
+          "format": "recipientAddress"
+        },
+        {
+          "path": "amount",
+          "label": "Amount",
+          "format": "tokenAmount"
+        }
+      ]
+    }
+  }
+}

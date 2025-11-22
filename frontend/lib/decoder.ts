@@ -18,6 +18,8 @@ export interface DecodedTransaction {
 export async function decodeCalldata(
   calldata: string
 ): Promise<DecodedTransaction> {
+  console.log("🔍 Decoding calldata:", calldata.substring(0, 20) + "...");
+
   // Validate calldata format
   if (!calldata || !calldata.startsWith("0x")) {
     throw new Error("Calldata must start with 0x");
@@ -37,13 +39,19 @@ export async function decodeCalldata(
     );
   }
 
+  console.log("📥 Loading descriptor...");
   const descriptor = await loadDescriptor();
+  console.log("✅ Descriptor loaded");
+
   const contractInterface = new Interface(descriptor.context.contract.abi);
 
   let decoded;
   try {
+    console.log("🔧 Parsing transaction...");
     decoded = contractInterface.parseTransaction({ data: calldata });
+    console.log("✅ Parsed function:", decoded?.name);
   } catch (error: any) {
+    console.error("❌ Parse error:", error);
     throw new Error(
       `Failed to parse calldata: ${
         error.message || "Invalid calldata format"
@@ -55,10 +63,14 @@ export async function decodeCalldata(
     throw new Error("Failed to parse calldata: Unknown error");
   }
 
+  console.log("🔍 Finding format for function:", decoded.name);
   const format = findFormat(descriptor, decoded.name);
   if (!format) {
+    console.error("❌ No format found for:", decoded.name);
+    console.log("Available formats:", Object.keys(descriptor.display.formats));
     throw new Error(`No ERC-7730 format found for function: ${decoded.name}`);
   }
+  console.log("✅ Format found:", format.intent);
 
   const fields: DecodedField[] = [];
 

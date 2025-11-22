@@ -1,55 +1,62 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import TransactionPreview from './TransactionPreview'
-import { decodeCalldata, generateExampleCalldata } from '@/lib/decoder'
-import type { DecodedTransaction } from '@/lib/decoder'
+import { useState } from "react";
+import TransactionPreview from "./TransactionPreview";
+import { decodeCalldata, generateExampleCalldata } from "@/lib/decoder";
+import type { DecodedTransaction } from "@/lib/decoder";
 
 export default function CalldataDecoder() {
-  const [calldata, setCalldata] = useState('')
-  const [decodedTx, setDecodedTx] = useState<DecodedTransaction | null>(null)
-  const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [calldata, setCalldata] = useState("");
+  const [decodedTx, setDecodedTx] = useState<DecodedTransaction | null>(null);
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleDecode = async () => {
-    setError('')
-    setDecodedTx(null)
-    setIsLoading(true)
+    console.log("🎯 Decode button clicked!");
+    console.log("📝 Current calldata:", calldata);
+
+    setError("");
+    setDecodedTx(null);
+    setIsLoading(true);
 
     try {
       if (!calldata.trim()) {
-        throw new Error('Please enter calldata')
+        throw new Error("Please enter calldata");
       }
 
-      if (!calldata.startsWith('0x')) {
-        throw new Error('Calldata must start with 0x')
+      if (!calldata.startsWith("0x")) {
+        throw new Error("Calldata must start with 0x");
       }
 
-      const decoded = await decodeCalldata(calldata)
-      setDecodedTx(decoded)
+      console.log("📞 Calling decodeCalldata...");
+      const decoded = await decodeCalldata(calldata);
+      console.log("✅ Decode successful:", decoded);
+      setDecodedTx(decoded);
     } catch (err: any) {
-      setError(err.message || 'Failed to decode calldata')
+      console.error("❌ Decode error:", err);
+      setError(err.message || "Failed to decode calldata");
     } finally {
-      setIsLoading(false)
+      console.log("🏁 Decode finished");
+      setIsLoading(false);
     }
-  }
+  };
 
   const loadExample = async (exampleType: string) => {
-    setError('')
-    setDecodedTx(null)
-    setIsLoading(true)
+    setError("");
+    setDecodedTx(null);
+    setIsLoading(true);
 
     try {
-      const exampleCalldata = await generateExampleCalldata(exampleType)
-      setCalldata(exampleCalldata)
-      const decoded = await decodeCalldata(exampleCalldata)
-      setDecodedTx(decoded)
+      const exampleCalldata = await generateExampleCalldata(exampleType);
+      setCalldata(exampleCalldata);
+      const decoded = await decodeCalldata(exampleCalldata);
+      setDecodedTx(decoded);
     } catch (err: any) {
-      setError(err.message || 'Failed to load example')
+      setError(err.message || "Failed to load example");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
@@ -76,29 +83,29 @@ export default function CalldataDecoder() {
             disabled={isLoading}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium"
           >
-            {isLoading ? 'Decoding...' : '🔍 Decode Calldata'}
+            {isLoading ? "Decoding..." : "🔍 Decode Calldata"}
           </button>
-          
+
           <div className="flex-1" />
-          
+
           <button
-            onClick={() => loadExample('swap')}
+            onClick={() => loadExample("swap")}
             disabled={isLoading}
             className="px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-sm font-medium"
           >
             📝 Example: Swap
           </button>
-          
+
           <button
-            onClick={() => loadExample('addLiquidity')}
+            onClick={() => loadExample("addLiquidity")}
             disabled={isLoading}
             className="px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-sm font-medium"
           >
             📝 Example: Add Liquidity
           </button>
-          
+
           <button
-            onClick={() => loadExample('transfer')}
+            onClick={() => loadExample("transfer")}
             disabled={isLoading}
             className="px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-sm font-medium"
           >
@@ -115,5 +122,5 @@ export default function CalldataDecoder() {
         {decodedTx && <TransactionPreview transaction={decodedTx} />}
       </div>
     </div>
-  )
+  );
 }
