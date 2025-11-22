@@ -1,0 +1,26 @@
+{
+  "name": "hardhat-contracts",
+  "version": "1.0.0",
+  "scripts": {
+    "node": "hardhat node",
+    "deploy": "hardhat run scripts/deploy.ts --network localhost",
+    "deploy:mainnet-fork": "hardhat run scripts/deploy.ts --network hardhat",
+    "test": "hardhat test",
+    "generate-descriptor": "hardhat run scripts/generate-descriptor.ts",
+    "validate-descriptor": "hardhat run scripts/validate-descriptor.ts",
+    "compile": "hardhat compile"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@typechain/ethers-v6": "^0.5.1",
+    "@typechain/hardhat": "^9.1.0",
+    "@types/node": "^20.0.0",
+    "hardhat": "^3.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.1",
+    "ethers": "^6.10.0"
+  }
+}
