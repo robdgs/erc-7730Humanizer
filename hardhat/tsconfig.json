@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "commonjs",
+    "module": "ES2022",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -9,7 +9,7 @@
     "resolveJsonModule": true,
     "outDir": "dist",
     "rootDir": ".",
-    "moduleResolution": "node"
+    "moduleResolution": "bundler"
   },
   "include": ["./scripts", "./test", "./hardhat.config.ts"],
   "files": ["./hardhat.config.ts"]

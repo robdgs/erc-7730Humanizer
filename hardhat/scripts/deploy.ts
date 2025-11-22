@@ -1,9 +1,16 @@
-import { ethers } from "hardhat";
+import { network } from "hardhat";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 async function main() {
   console.log("🚀 Starting deployment with Hardhat 3...");
+  
+  // Connettiti alla rete e ottieni ethers
+  const { ethers } = await network.connect();
   
   const [deployer] = await ethers.getSigners();
   console.log("📍 Deploying contracts with account:", deployer.address);

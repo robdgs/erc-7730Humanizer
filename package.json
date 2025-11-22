@@ -2,16 +2,16 @@
   "name": "erc7730-decoder",
   "version": "1.0.0",
   "description": "Human-readable transaction signing with ERC-7730",
+  "private": true,
   "scripts": {
-    "setup": "npm install && cd hardhat && npm install && cd ../frontend && npm install && cd ..",
-    "node": "cd hardhat && npm run node",
-    "deploy": "cd hardhat && npm run deploy",
-    "test": "cd hardhat && npm run test",
-    "generate-descriptor": "cd hardhat && npm run generate-descriptor",
-    "validate-descriptor": "cd hardhat && npm run validate-descriptor",
-    "dev": "cd frontend && npm run dev",
-    "build": "cd frontend && npm run build"
+    "setup": "npm install && cd hardhat && npm install && cd ../frontend && npm install",
+    "node": "npm run --prefix hardhat node",
+    "deploy": "npm run --prefix hardhat deploy",
+    "test": "npm run --prefix hardhat test",
+    "generate-descriptor": "npm run --prefix hardhat generate-descriptor",
+    "validate-descriptor": "npm run --prefix hardhat validate-descriptor",
+    "dev": "npm run --prefix frontend dev",
+    "build": "npm run --prefix frontend build"
   },
-  "keywords": ["erc7730", "hardhat3", "nextjs", "web3", "hackathon"],
-  "private": true
+  "keywords": ["erc7730", "hardhat3", "nextjs", "web3", "hackathon"]
 }

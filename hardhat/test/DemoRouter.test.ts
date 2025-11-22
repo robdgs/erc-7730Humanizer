@@ -1,19 +1,17 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
-import { DemoRouter } from "../typechain-types";
-import { SignerWithAddress } from "@nomicfoundation/hardhat-toolbox/signers";
+import hre from "hardhat";
 
 describe("DemoRouter - Hardhat 3 Tests", function () {
-  let demoRouter: DemoRouter;
-  let owner: SignerWithAddress;
-  let user: SignerWithAddress;
+  let demoRouter: any;
+  let owner: any;
+  let user: any;
 
   beforeEach(async function () {
     console.log("🧪 Setting up test environment with Hardhat 3...");
     
-    [owner, user] = await ethers.getSigners();
+    [owner, user] = await hre.ethers.getSigners();
     
-    const DemoRouter = await ethers.getContractFactory("DemoRouter");
+    const DemoRouter = await hre.ethers.getContractFactory("DemoRouter");
     demoRouter = await DemoRouter.deploy();
     await demoRouter.waitForDeployment();
     
@@ -37,7 +35,7 @@ describe("DemoRouter - Hardhat 3 Tests", function () {
     it("Should encode simpleTransfer calldata correctly", async function () {
       const token = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
       const recipient = user.address;
-      const amount = ethers.parseUnits("100", 6);
+      const amount = hre.ethers.parseUnits("100", 6);
 
       const calldata = demoRouter.interface.encodeFunctionData("simpleTransfer", [
         token,
@@ -62,8 +60,8 @@ describe("DemoRouter - Hardhat 3 Tests", function () {
       const params = {
         tokenIn: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
         tokenOut: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
-        amountIn: ethers.parseUnits("1000", 6),
-        minAmountOut: ethers.parseUnits("990", 6),
+        amountIn: hre.ethers.parseUnits("1000", 6),
+        minAmountOut: hre.ethers.parseUnits("990", 6),
         recipient: user.address,
         deadline: Math.floor(Date.now() / 1000) + 3600,
       };
@@ -91,8 +89,8 @@ describe("DemoRouter - Hardhat 3 Tests", function () {
       const params = {
         tokenA: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
         tokenB: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
-        amountA: ethers.parseUnits("1000", 6),
-        amountB: ethers.parseUnits("1000", 6),
+        amountA: hre.ethers.parseUnits("1000", 6),
+        amountB: hre.ethers.parseUnits("1000", 6),
         recipient: user.address,
         deadline: Math.floor(Date.now() / 1000) + 3600,
       };
@@ -111,9 +109,9 @@ describe("DemoRouter - Hardhat 3 Tests", function () {
     it("Should encode removeLiquidity calldata correctly", async function () {
       const tokenA = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
       const tokenB = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
-      const liquidity = ethers.parseEther("100");
-      const minAmountA = ethers.parseUnits("50", 6);
-      const minAmountB = ethers.parseUnits("50", 6);
+      const liquidity = hre.ethers.parseEther("100");
+      const minAmountA = hre.ethers.parseUnits("50", 6);
+      const minAmountB = hre.ethers.parseUnits("50", 6);
       const recipient = user.address;
       const deadline = Math.floor(Date.now() / 1000) + 3600;
 
@@ -139,15 +137,15 @@ describe("DemoRouter - Hardhat 3 Tests", function () {
 
   describe("Hardhat 3 Features", function () {
     it("Should demonstrate Hardhat 3 network capabilities", async function () {
-      const network = await ethers.provider.getNetwork();
+      const network = await hre.ethers.provider.getNetwork();
       console.log("✓ Network:", network.name);
       console.log("✓ Chain ID:", network.chainId.toString());
 
-      const blockNumber = await ethers.provider.getBlockNumber();
+      const blockNumber = await hre.ethers.provider.getBlockNumber();
       console.log("✓ Current block:", blockNumber);
 
-      const balance = await ethers.provider.getBalance(owner.address);
-      console.log("✓ Owner balance:", ethers.formatEther(balance), "ETH");
+      const balance = await hre.ethers.provider.getBalance(owner.address);
+      console.log("✓ Owner balance:", hre.ethers.formatEther(balance), "ETH");
 
       expect(network.chainId).to.equal(31337n);
     });
