@@ -499,9 +499,6 @@ export default function SignPage() {
 
         {/* Info Section */}
         <div className="mt-12 bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-8">
-          <h3 className="text-2xl font-bold mb-4 text-gray-800">
-            🛡️ Secure, Sovereign Systems
-          </h3>
           <div className="grid md:grid-cols-3 gap-6 text-gray-700">
             <div>
               <h4 className="font-bold text-lg mb-2">ERC-7730 Standard</h4>
