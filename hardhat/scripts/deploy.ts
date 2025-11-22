@@ -15,8 +15,9 @@ async function main() {
   const [deployer] = await ethers.getSigners();
   const networkInfo = await ethers.provider.getNetwork();
   const chainId = networkInfo.chainId;
-  const networkName = networkInfo.name || process.env.HARDHAT_NETWORK || "unknown";
-  
+  const networkName =
+    networkInfo.name || process.env.HARDHAT_NETWORK || "unknown";
+
   console.log("📍 Deploying contracts with account:", deployer.address);
   console.log("🌐 Network:", networkName);
   console.log("🔗 Chain ID:", chainId.toString());
@@ -25,14 +26,16 @@ async function main() {
   console.log("💰 Account balance:", ethers.formatEther(balance), "ETH");
 
   if (balance === 0n) {
-    console.error("❌ Account has no balance. Please fund the deployer account.");
+    console.error(
+      "❌ Account has no balance. Please fund the deployer account."
+    );
     process.exit(1);
   }
 
   console.log("\n📦 Deploying DemoRouter...");
   const DemoRouter = await ethers.getContractFactory("DemoRouter");
   const demoRouter = await DemoRouter.deploy();
-  
+
   console.log("⏳ Waiting for deployment transaction...");
   await demoRouter.waitForDeployment();
 
@@ -54,9 +57,10 @@ async function main() {
     fs.mkdirSync(deploymentsDir, { recursive: true });
   }
 
-  const filename = networkName === "localhost" || networkName === "hardhat" 
-    ? "DemoRouter.json" 
-    : `DemoRouter-${networkName}.json`;
+  const filename =
+    networkName === "localhost" || networkName === "hardhat"
+      ? "DemoRouter.json"
+      : `DemoRouter-${networkName}.json`;
 
   fs.writeFileSync(
     path.join(deploymentsDir, filename),
@@ -70,7 +74,7 @@ async function main() {
   console.log("Network:", networkName);
   console.log("Chain ID:", chainId.toString());
   console.log("━".repeat(60));
-  
+
   if (networkName === "arbitrum" || networkName === "arbitrumSepolia") {
     console.log("\n📝 To verify on Arbiscan:");
     console.log(`npx hardhat verify --network ${networkName} ${address}`);

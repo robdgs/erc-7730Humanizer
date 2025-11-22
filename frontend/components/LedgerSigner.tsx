@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
-import Eth from '@ledgerhq/hw-app-eth';
-import { ethers } from 'ethers';
+import React, { useState } from "react";
+import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
+import Eth from "@ledgerhq/hw-app-eth";
+import { ethers } from "ethers";
 
 interface LedgerSignerProps {
   onConnected?: (address: string) => void;
@@ -17,7 +17,7 @@ export default function LedgerSigner({
   onError,
 }: LedgerSignerProps) {
   const [isConnected, setIsConnected] = useState(false);
-  const [address, setAddress] = useState<string>('');
+  const [address, setAddress] = useState<string>("");
   const [isConnecting, setIsConnecting] = useState(false);
   const [transport, setTransport] = useState<any>(null);
 
@@ -29,18 +29,19 @@ export default function LedgerSigner({
 
       const derivationPath = "44'/60'/0'/0/0";
       const result = await eth.getAddress(derivationPath);
-      
+
       setTransport(newTransport);
       setAddress(result.address);
       setIsConnected(true);
-      
+
       if (onConnected) {
         onConnected(result.address);
       }
     } catch (error: any) {
-      console.error('Failed to connect to Ledger:', error);
-      const errorMessage = error.message || 'Failed to connect to Ledger device';
-      
+      console.error("Failed to connect to Ledger:", error);
+      const errorMessage =
+        error.message || "Failed to connect to Ledger device";
+
       if (onError) {
         onError(errorMessage);
       }
@@ -55,8 +56,8 @@ export default function LedgerSigner({
       setTransport(null);
     }
     setIsConnected(false);
-    setAddress('');
-    
+    setAddress("");
+
     if (onDisconnected) {
       onDisconnected();
     }
@@ -65,7 +66,7 @@ export default function LedgerSigner({
   const signTransaction = async (transaction: any): Promise<string | null> => {
     if (!transport || !isConnected) {
       if (onError) {
-        onError('Ledger not connected');
+        onError("Ledger not connected");
       }
       return null;
     }
@@ -74,7 +75,8 @@ export default function LedgerSigner({
       const eth = new Eth(transport);
       const derivationPath = "44'/60'/0'/0/0";
 
-      const serializedTx = ethers.Transaction.from(transaction).unsignedSerialized;
+      const serializedTx =
+        ethers.Transaction.from(transaction).unsignedSerialized;
       const signature = await eth.signTransaction(
         derivationPath,
         serializedTx.slice(2)
@@ -82,9 +84,9 @@ export default function LedgerSigner({
 
       return signature.r + signature.s + signature.v;
     } catch (error: any) {
-      console.error('Failed to sign transaction:', error);
+      console.error("Failed to sign transaction:", error);
       if (onError) {
-        onError(error.message || 'Failed to sign transaction');
+        onError(error.message || "Failed to sign transaction");
       }
       return null;
     }
@@ -121,10 +123,7 @@ export default function LedgerSigner({
           <div className="address-display">
             {address.slice(0, 6)}...{address.slice(-4)}
           </div>
-          <button
-            onClick={disconnectLedger}
-            className="disconnect-button"
-          >
+          <button onClick={disconnectLedger} className="disconnect-button">
             Disconnect
           </button>
         </div>
@@ -199,7 +198,8 @@ export default function LedgerSigner({
         }
 
         @keyframes pulse {
-          0%, 100% {
+          0%,
+          100% {
             opacity: 1;
           }
           50% {
@@ -213,7 +213,7 @@ export default function LedgerSigner({
         }
 
         .address-display {
-          font-family: 'Courier New', monospace;
+          font-family: "Courier New", monospace;
           font-size: 14px;
           color: #065f46;
           background: white;

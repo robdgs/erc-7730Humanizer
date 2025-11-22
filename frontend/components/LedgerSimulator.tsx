@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 interface LedgerSimulatorProps {
   intent: string;
@@ -91,21 +91,29 @@ export default function LedgerSimulator({
           <div className="ledger-logo">LEDGER</div>
           <div className="ledger-model">Nano X</div>
         </div>
-        
+
         <div className="ledger-screen">
           {currentFieldIndex === 0 ? (
             <div className="text-center">
-              <div className="text-xs font-mono text-gray-500 mb-2">Review transaction</div>
+              <div className="text-xs font-mono text-gray-500 mb-2">
+                Review transaction
+              </div>
               <div className="text-sm font-mono font-bold">{intent}</div>
-              <div className="text-xs font-mono mt-1 text-gray-600">{functionName}</div>
+              <div className="text-xs font-mono mt-1 text-gray-600">
+                {functionName}
+              </div>
             </div>
           ) : (
             <div>
-              <div className="text-xs font-mono text-gray-500 mb-1">{currentField.label}</div>
-              <div className="text-sm font-mono break-all">{currentField.value}</div>
+              <div className="text-xs font-mono text-gray-500 mb-1">
+                {currentField.label}
+              </div>
+              <div className="text-sm font-mono break-all">
+                {currentField.value}
+              </div>
             </div>
           )}
-          
+
           <div className="text-xs text-center mt-3 text-gray-400">
             {currentFieldIndex + 1} / {fields.length + 1}
           </div>
@@ -193,7 +201,7 @@ export default function LedgerSimulator({
           flex-direction: column;
           justify-content: center;
           color: #fff;
-          font-family: 'Courier New', monospace;
+          font-family: "Courier New", monospace;
           border: 1px solid #333;
         }
 

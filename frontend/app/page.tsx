@@ -1,5 +1,5 @@
-import CalldataDecoder from '@/components/CalldataDecoder'
-import Link from 'next/link'
+import CalldataDecoder from "@/components/CalldataDecoder";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -15,7 +15,7 @@ export default function Home() {
           <p className="text-sm text-gray-500 mb-4">
             Built with Hardhat 3 • Next.js 14 • TypeScript
           </p>
-          <Link 
+          <Link
             href="/sign"
             className="inline-block px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold rounded-lg transition-all"
           >
@@ -30,16 +30,28 @@ export default function Home() {
             </h2>
             <div className="grid md:grid-cols-3 gap-4 text-sm">
               <div className="bg-blue-50 p-4 rounded-lg">
-                <div className="font-semibold text-blue-900 mb-1">Smart Contract</div>
-                <div className="text-blue-700">DemoRouter with swap & liquidity functions</div>
+                <div className="font-semibold text-blue-900 mb-1">
+                  Smart Contract
+                </div>
+                <div className="text-blue-700">
+                  DemoRouter with swap & liquidity functions
+                </div>
               </div>
               <div className="bg-purple-50 p-4 rounded-lg">
-                <div className="font-semibold text-purple-900 mb-1">ERC-7730 Descriptor</div>
-                <div className="text-purple-700">Human-readable field labels & formatting</div>
+                <div className="font-semibold text-purple-900 mb-1">
+                  ERC-7730 Descriptor
+                </div>
+                <div className="text-purple-700">
+                  Human-readable field labels & formatting
+                </div>
               </div>
               <div className="bg-green-50 p-4 rounded-lg">
-                <div className="font-semibold text-green-900 mb-1">Hardhat 3 Backend</div>
-                <div className="text-green-700">Network simulation & mainnet forking</div>
+                <div className="font-semibold text-green-900 mb-1">
+                  Hardhat 3 Backend
+                </div>
+                <div className="text-green-700">
+                  Network simulation & mainnet forking
+                </div>
               </div>
             </div>
           </div>
@@ -53,36 +65,48 @@ export default function Home() {
           </h3>
           <div className="grid md:grid-cols-2 gap-6 text-gray-700">
             <div>
-              <h4 className="font-semibold text-lg mb-2">1. Smart Contract Development</h4>
+              <h4 className="font-semibold text-lg mb-2">
+                1. Smart Contract Development
+              </h4>
               <p className="text-sm">
-                DemoRouter.sol is compiled and deployed using Hardhat 3 with mainnet forking enabled. 
-                The contract includes swap and liquidity functions with complex struct parameters.
+                DemoRouter.sol is compiled and deployed using Hardhat 3 with
+                mainnet forking enabled. The contract includes swap and
+                liquidity functions with complex struct parameters.
               </p>
             </div>
             <div>
-              <h4 className="font-semibold text-lg mb-2">2. ERC-7730 Descriptor Generation</h4>
+              <h4 className="font-semibold text-lg mb-2">
+                2. ERC-7730 Descriptor Generation
+              </h4>
               <p className="text-sm">
-                A TypeScript script parses the contract ABI and generates an ERC-7730 descriptor 
-                with human-readable labels and formatting rules for each function parameter.
+                A TypeScript script parses the contract ABI and generates an
+                ERC-7730 descriptor with human-readable labels and formatting
+                rules for each function parameter.
               </p>
             </div>
             <div>
-              <h4 className="font-semibold text-lg mb-2">3. Calldata Encoding</h4>
+              <h4 className="font-semibold text-lg mb-2">
+                3. Calldata Encoding
+              </h4>
               <p className="text-sm">
-                Transaction calldata is encoded using ethers.js Interface. This raw hex data 
-                represents the function call and parameters that would be sent on-chain.
+                Transaction calldata is encoded using ethers.js Interface. This
+                raw hex data represents the function call and parameters that
+                would be sent on-chain.
               </p>
             </div>
             <div>
-              <h4 className="font-semibold text-lg mb-2">4. Human-Readable Display</h4>
+              <h4 className="font-semibold text-lg mb-2">
+                4. Human-Readable Display
+              </h4>
               <p className="text-sm">
-                The decoder uses the ERC-7730 descriptor to transform raw calldata into a 
-                beautiful, understandable preview showing exactly what the transaction will do.
+                The decoder uses the ERC-7730 descriptor to transform raw
+                calldata into a beautiful, understandable preview showing
+                exactly what the transaction will do.
               </p>
             </div>
           </div>
         </div>
       </div>
     </main>
-  )
+  );
 }
