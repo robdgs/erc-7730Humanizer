@@ -34,43 +34,80 @@ export default function PortfolioCard({
   };
 
   return (
-    <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl p-6 text-white shadow-xl">
-      <div className="flex justify-between items-start mb-6">
-        <div>
-          <div className="text-sm opacity-90 mb-1">Total Portfolio Value</div>
-          <div className="text-4xl font-bold">{formatUSD(totalValueUSD)}</div>
-        </div>
-        <div className="bg-white bg-opacity-20 rounded-lg px-4 py-2">
-          <div className="text-xs opacity-90">Assets</div>
-          <div className="text-2xl font-bold">{tokenCount}</div>
+    <div
+      className="terminal-box"
+      style={{ padding: "1.5rem", border: "2px solid #00ff41" }}
+    >
+      <div style={{ marginBottom: "1.5rem" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div>
+            <div
+              className="terminal-dim"
+              style={{ fontSize: "0.75rem", marginBottom: "0.25rem" }}
+            >
+              &gt; TOTAL VALUE
+            </div>
+            <div
+              className="terminal-text terminal-glow"
+              style={{ fontSize: "2.5rem", fontWeight: "bold" }}
+            >
+              {formatUSD(totalValueUSD)}
+            </div>
+          </div>
+          <div
+            className="terminal-box"
+            style={{ padding: "1rem", border: "1px solid #00ff41" }}
+          >
+            <div
+              className="terminal-dim"
+              style={{ fontSize: "0.7rem", marginBottom: "0.25rem" }}
+            >
+              ASSETS
+            </div>
+            <div
+              className="terminal-cyan"
+              style={{
+                fontSize: "1.75rem",
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
+            >
+              {tokenCount}
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="border-t border-white border-opacity-20 pt-4">
-        <div className="flex justify-between items-center text-sm">
+      <div style={{ borderTop: "1px solid #004d1a", paddingTop: "1rem" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            fontSize: "0.8rem",
+          }}
+        >
           <div>
-            <div className="opacity-75 mb-1">Wallet Address</div>
-            <div className="font-mono">
+            <div className="terminal-dim" style={{ marginBottom: "0.25rem" }}>
+              &gt; WALLET_ADDRESS
+            </div>
+            <div className="terminal-text">
               {address.substring(0, 6)}...{address.substring(38)}
             </div>
           </div>
-          <div className="text-right">
-            <div className="opacity-75 mb-1">Last Updated</div>
-            <div>{formatDate(lastUpdated)}</div>
+          <div style={{ textAlign: "right" }}>
+            <div className="terminal-dim" style={{ marginBottom: "0.25rem" }}>
+              &gt; LAST_SYNC
+            </div>
+            <div className="terminal-amber">{formatDate(lastUpdated)}</div>
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes shimmer {
-          0% {
-            background-position: -1000px 0;
-          }
-          100% {
-            background-position: 1000px 0;
-          }
-        }
-      `}</style>
     </div>
   );
 }

@@ -57,7 +57,7 @@ export default function VestingTimeline({
   };
 
   return (
-    <div className="space-y-4">
+    <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
       {claimableTokens.map((token, idx) => {
         const canClaim = isClaimable(token.claimableAt);
         const progress = token.vestingSchedule
@@ -67,21 +67,50 @@ export default function VestingTimeline({
         return (
           <div
             key={idx}
-            className={`bg-white rounded-lg border-2 p-5 transition-all ${
-              canClaim ? "border-green-400 shadow-md" : "border-gray-200"
-            }`}
+            className="terminal-box"
+            style={{
+              padding: "1.25rem",
+              border: canClaim ? "2px solid #00ff41" : "1px solid #004d1a",
+            }}
           >
-            <div className="flex justify-between items-start mb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center text-white font-bold">
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "start",
+                marginBottom: "1rem",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.75rem",
+                }}
+              >
+                <div
+                  className="terminal-text"
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    border: "2px solid #00ff41",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: "bold",
+                  }}
+                >
                   {token.symbol.substring(0, 2)}
                 </div>
                 <div>
-                  <div className="font-semibold text-gray-800 text-lg">
+                  <div
+                    className="terminal-text"
+                    style={{ fontWeight: 600, fontSize: "1.1rem" }}
+                  >
                     {token.symbol}
                   </div>
-                  <div className="text-sm text-gray-500">
-                    {token.isVested ? "Vesting" : "Claimable"}
+                  <div className="terminal-dim" style={{ fontSize: "0.8rem" }}>
+                    {token.isVested ? "VESTING" : "CLAIMABLE"}
                   </div>
                 </div>
               </div>
@@ -89,25 +118,46 @@ export default function VestingTimeline({
               {canClaim && onClaim && (
                 <button
                   onClick={() => onClaim(token)}
-                  className="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold rounded-lg transition-all"
+                  className="terminal-button"
+                  style={{
+                    padding: "0.5rem 1rem",
+                    fontSize: "0.8rem",
+                    borderColor: "#00ff41",
+                    color: "#00ff41",
+                  }}
                 >
-                  Claim {formatAmount(token.amount, token.decimals)}
+                  [CLAIM {formatAmount(token.amount, token.decimals)}]
                 </button>
               )}
 
               {!canClaim && (
-                <div className="text-sm text-gray-500">
-                  Claimable {formatDate(token.claimableAt)}
+                <div className="terminal-dim" style={{ fontSize: "0.8rem" }}>
+                  &gt; {formatDate(token.claimableAt)}
                 </div>
               )}
             </div>
 
             {token.vestingSchedule && (
-              <div className="space-y-3">
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.75rem",
+                }}
+              >
                 <div>
-                  <div className="flex justify-between text-xs text-gray-600 mb-2">
-                    <span>Progress: {progress.toFixed(1)}%</span>
-                    <span>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      fontSize: "0.75rem",
+                      marginBottom: "0.5rem",
+                    }}
+                  >
+                    <span className="terminal-cyan">
+                      PROGRESS: {progress.toFixed(1)}%
+                    </span>
+                    <span className="terminal-text">
                       {formatAmount(
                         token.vestingSchedule.claimedAmount,
                         token.decimals
@@ -119,38 +169,102 @@ export default function VestingTimeline({
                       )}
                     </span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "6px",
+                      background: "#0a0a0a",
+                      border: "1px solid #004d1a",
+                      position: "relative",
+                      overflow: "hidden",
+                    }}
+                  >
                     <div
-                      className="bg-gradient-to-r from-blue-500 to-purple-600 h-3 transition-all"
-                      style={{ width: `${progress}%` }}
+                      style={{
+                        position: "absolute",
+                        left: 0,
+                        top: 0,
+                        height: "100%",
+                        width: `${progress}%`,
+                        background: "#00ff41",
+                        transition: "width 0.3s",
+                      }}
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div className="bg-gray-50 p-3 rounded">
-                    <div className="text-gray-600 mb-1">Start Date</div>
-                    <div className="font-semibold text-gray-800">
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(2, 1fr)",
+                    gap: "1rem",
+                    fontSize: "0.85rem",
+                  }}
+                >
+                  <div
+                    className="terminal-box"
+                    style={{ padding: "0.75rem", border: "1px solid #004d1a" }}
+                  >
+                    <div
+                      className="terminal-dim"
+                      style={{ marginBottom: "0.25rem", fontSize: "0.75rem" }}
+                    >
+                      START_DATE
+                    </div>
+                    <div className="terminal-text" style={{ fontWeight: 600 }}>
                       {formatDate(token.vestingSchedule.startTime)}
                     </div>
                   </div>
-                  <div className="bg-gray-50 p-3 rounded">
-                    <div className="text-gray-600 mb-1">End Date</div>
-                    <div className="font-semibold text-gray-800">
+                  <div
+                    className="terminal-box"
+                    style={{ padding: "0.75rem", border: "1px solid #004d1a" }}
+                  >
+                    <div
+                      className="terminal-dim"
+                      style={{ marginBottom: "0.25rem", fontSize: "0.75rem" }}
+                    >
+                      END_DATE
+                    </div>
+                    <div className="terminal-text" style={{ fontWeight: 600 }}>
                       {formatDate(token.vestingSchedule.endTime)}
                     </div>
                   </div>
                   {token.vestingSchedule.cliffPeriod && (
-                    <div className="bg-gray-50 p-3 rounded">
-                      <div className="text-gray-600 mb-1">Cliff Period</div>
-                      <div className="font-semibold text-gray-800">
+                    <div
+                      className="terminal-box"
+                      style={{
+                        padding: "0.75rem",
+                        border: "1px solid #004d1a",
+                      }}
+                    >
+                      <div
+                        className="terminal-dim"
+                        style={{ marginBottom: "0.25rem", fontSize: "0.75rem" }}
+                      >
+                        CLIFF_PERIOD
+                      </div>
+                      <div
+                        className="terminal-text"
+                        style={{ fontWeight: 600 }}
+                      >
                         {token.vestingSchedule.cliffPeriod}
                       </div>
                     </div>
                   )}
-                  <div className="bg-gray-50 p-3 rounded">
-                    <div className="text-gray-600 mb-1">Vesting Interval</div>
-                    <div className="font-semibold text-gray-800 capitalize">
+                  <div
+                    className="terminal-box"
+                    style={{ padding: "0.75rem", border: "1px solid #004d1a" }}
+                  >
+                    <div
+                      className="terminal-dim"
+                      style={{ marginBottom: "0.25rem", fontSize: "0.75rem" }}
+                    >
+                      INTERVAL
+                    </div>
+                    <div
+                      className="terminal-text"
+                      style={{ fontWeight: 600, textTransform: "uppercase" }}
+                    >
                       {token.vestingSchedule.vestingInterval}
                     </div>
                   </div>
@@ -159,12 +273,20 @@ export default function VestingTimeline({
             )}
 
             {!token.isVested && canClaim && (
-              <div className="mt-3 bg-green-50 border border-green-200 rounded p-3 text-sm text-green-800">
-                💰{" "}
+              <div
+                className="terminal-text"
+                style={{
+                  marginTop: "0.75rem",
+                  padding: "0.75rem",
+                  border: "1px solid #00ff41",
+                  fontSize: "0.85rem",
+                }}
+              >
+                &gt;&gt;{" "}
                 <strong>
                   {formatAmount(token.amount, token.decimals)} {token.symbol}
                 </strong>{" "}
-                available to claim now!
+                AVAILABLE TO CLAIM NOW
               </div>
             )}
           </div>

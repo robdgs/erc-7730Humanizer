@@ -1,19 +1,23 @@
-import type { Metadata } from 'next'
-import './globals.css'
+import type { Metadata } from "next";
+import "./globals.css";
+import StatusBar from "@/app/StatusBar";
 
 export const metadata: Metadata = {
-  title: 'ERC-7730 Transaction Decoder',
-  description: 'Human-readable transaction signing with ERC-7730 descriptors',
-}
+  title: "ERC-7730 SYSTEM // TRANSACTION DECODER",
+  description: "CLASSIFIED :: Human-readable transaction signing protocol",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
-      <body className="bg-gray-50 min-h-screen">{children}</body>
+      <body className="min-h-screen">
+        <StatusBar />
+        {children}
+      </body>
     </html>
-  )
+  );
 }

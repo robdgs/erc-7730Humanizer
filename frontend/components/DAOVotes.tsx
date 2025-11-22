@@ -70,17 +70,42 @@ export default function DAOVotes({
 
   return (
     <div className="space-y-4">
-      <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-4 mb-4">
-        <div className="flex justify-between items-center">
+      <div
+        className="terminal-box"
+        style={{ padding: "1rem", border: "2px solid #00ffff" }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <div>
-            <div className="text-sm text-gray-600 mb-1">Your Voting Power</div>
-            <div className="text-2xl font-bold text-gray-800">
+            <div
+              className="terminal-dim"
+              style={{ fontSize: "0.75rem", marginBottom: "0.25rem" }}
+            >
+              &gt; YOUR_VOTING_POWER
+            </div>
+            <div
+              className="terminal-cyan terminal-glow"
+              style={{ fontSize: "1.75rem", fontWeight: "bold" }}
+            >
               {formatVotes(votingPower)}
             </div>
           </div>
-          <div className="text-right">
-            <div className="text-sm text-gray-600 mb-1">Active Proposals</div>
-            <div className="text-2xl font-bold text-gray-800">
+          <div style={{ textAlign: "right" }}>
+            <div
+              className="terminal-dim"
+              style={{ fontSize: "0.75rem", marginBottom: "0.25rem" }}
+            >
+              &gt; ACTIVE_PROPOSALS
+            </div>
+            <div
+              className="terminal-amber terminal-glow"
+              style={{ fontSize: "1.75rem", fontWeight: "bold" }}
+            >
               {proposals.filter((p) => p.status === "active").length}
             </div>
           </div>
@@ -93,60 +118,140 @@ export default function DAOVotes({
           proposal.votesAgainst
         );
 
+        const statusColors: Record<string, string> = {
+          active: "#00ff41",
+          passed: "#00ffff",
+          rejected: "#ff0040",
+          pending: "#666666",
+        };
+
         return (
           <div
             key={proposal.id}
-            className="bg-white rounded-lg border border-gray-200 p-5 hover:shadow-md transition-shadow"
+            className="terminal-box"
+            style={{
+              padding: "1.25rem",
+              border: `1px solid ${statusColors[proposal.status] || "#004d1a"}`,
+            }}
           >
-            <div className="flex justify-between items-start mb-3">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <h3 className="font-semibold text-gray-800">
-                    {proposal.title}
-                  </h3>
-                  <span
-                    className={`text-xs px-2 py-1 rounded-full ${getStatusColor(
-                      proposal.status
-                    )}`}
-                  >
-                    {proposal.status.toUpperCase()}
-                  </span>
-                </div>
-                <p className="text-sm text-gray-600">{proposal.description}</p>
+            <div style={{ marginBottom: "1rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.75rem",
+                  marginBottom: "0.75rem",
+                }}
+              >
+                <div
+                  className="terminal-prompt"
+                  style={{ margin: 0, padding: 0 }}
+                ></div>
+                <h3
+                  className="terminal-text"
+                  style={{ fontWeight: 600, fontSize: "1rem" }}
+                >
+                  {proposal.title}
+                </h3>
+                <span
+                  className="terminal-blink"
+                  style={{
+                    fontSize: "0.7rem",
+                    padding: "0.25rem 0.75rem",
+                    border: `1px solid ${statusColors[proposal.status]}`,
+                    color: statusColors[proposal.status],
+                    letterSpacing: "0.1em",
+                  }}
+                >
+                  [{proposal.status.toUpperCase()}]
+                </span>
               </div>
+              <p
+                className="terminal-dim"
+                style={{ fontSize: "0.85rem", marginLeft: "1.5rem" }}
+              >
+                {proposal.description}
+              </p>
             </div>
 
-            <div className="mb-4">
-              <div className="flex justify-between text-xs text-gray-600 mb-1">
-                <span>For: {formatVotes(proposal.votesFor)}</span>
-                <span>Against: {formatVotes(proposal.votesAgainst)}</span>
+            <div style={{ marginBottom: "1rem", marginLeft: "1.5rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  fontSize: "0.75rem",
+                  marginBottom: "0.5rem",
+                }}
+              >
+                <span className="terminal-text">
+                  FOR: {formatVotes(proposal.votesFor)}
+                </span>
+                <span className="terminal-red">
+                  AGAINST: {formatVotes(proposal.votesAgainst)}
+                </span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+              <div
+                style={{
+                  width: "100%",
+                  height: "4px",
+                  background: "#0a0a0a",
+                  border: "1px solid #004d1a",
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+              >
                 <div
-                  className="bg-gradient-to-r from-green-500 to-emerald-600 h-2 transition-all"
-                  style={{ width: `${percentage}%` }}
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    height: "100%",
+                    width: `${percentage}%`,
+                    background: "#00ff41",
+                    boxShadow: "0 0 10px #00ff41",
+                    transition: "width 0.3s",
+                  }}
                 />
               </div>
             </div>
 
-            <div className="flex justify-between items-center">
-              <div className="text-sm text-gray-500">
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginLeft: "1.5rem",
+              }}
+            >
+              <div className="terminal-amber" style={{ fontSize: "0.8rem" }}>
                 {getTimeRemaining(proposal.endTime)}
               </div>
 
               {proposal.status === "active" && onVote && (
-                <div className="flex gap-2">
+                <div style={{ display: "flex", gap: "0.5rem" }}>
                   <button
                     onClick={() => onVote(proposal.id, false)}
-                    className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm rounded transition-colors"
+                    className="terminal-button"
+                    style={{
+                      padding: "0.4rem 1rem",
+                      fontSize: "0.75rem",
+                      borderColor: "#ff0040",
+                      color: "#ff0040",
+                    }}
                   >
-                    Vote Against
+                    [AGAINST]
                   </button>
                   <button
                     onClick={() => onVote(proposal.id, true)}
-                    className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-sm rounded transition-colors"
+                    className="terminal-button"
+                    style={{
+                      padding: "0.4rem 1rem",
+                      fontSize: "0.75rem",
+                      borderColor: "#00ff41",
+                      color: "#00ff41",
+                    }}
                   >
-                    Vote For
+                    [FOR]
                   </button>
                 </div>
               )}

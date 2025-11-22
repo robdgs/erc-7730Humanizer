@@ -1,305 +1,528 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
-import { getPortfolio } from "@/lib/multibaas/portfolio";
-import { getDaoVotes } from "@/lib/multibaas/governance";
-import { getClaimable } from "@/lib/multibaas/events";
+import { useWallet } from "@/hooks/useWallet";
+import { useDashboard } from "@/hooks/useDashboard";
+import { ConnectButton } from "@/components/wallet/ConnectButton";
+import { AddressDisplay } from "@/components/wallet/AddressDisplay";
+import { SigningModal } from "@/components/signing/SigningModal";
 import PortfolioCard from "@/components/PortfolioCard";
 import TokenTable from "@/components/TokenTable";
 import DAOVotes from "@/components/DAOVotes";
 import VestingTimeline from "@/components/VestingTimeline";
-import LedgerSimulator from "@/components/LedgerSimulator";
+import { ethers } from "ethers";
+import {
+  ERC7730Formatter,
+  loadDescriptor,
+  type FormattedTransaction,
+} from "@/core/erc7730";
 
-interface ActionFlow {
-  type: "vote" | "claim" | "stake" | "swap";
-  data: any;
-}
+export default function DashboardPage() {
+  const {
+    address: walletAddress,
+    provider,
+    isConnected,
+    isConnecting,
+    connect,
+    disconnect,
+  } = useWallet();
+  const [manualAddress, setManualAddress] = useState("");
+  const [useManualAddress, setUseManualAddress] = useState(false);
+  const [forceMock, setForceMock] = useState(false);
 
-export default function Dashboard() {
-  const [address, setAddress] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [portfolioData, setPortfolioData] = useState<any>(null);
-  const [governanceData, setGovernanceData] = useState<any>(null);
-  const [claimableData, setClaimableData] = useState<any>(null);
-  const [error, setError] = useState("");
-  const [actionFlow, setActionFlow] = useState<ActionFlow | null>(null);
-  const [showLedger, setShowLedger] = useState(false);
+  // Use manual address if set, otherwise use wallet address
+  const activeAddress = useManualAddress ? manualAddress : walletAddress;
 
-  const loadDashboard = async () => {
-    if (!address || !/^0x[a-fA-F0-9]{40}$/.test(address)) {
-      setError("Please enter a valid Ethereum address");
-      return;
-    }
+  const { portfolio, governance, vesting, loading, error } = useDashboard(
+    activeAddress,
+    forceMock || useManualAddress ? null : provider,
+    forceMock || useManualAddress
+  );
+  const [txToSign, setTxToSign] = useState<FormattedTransaction | null>(null);
 
-    setLoading(true);
-    setError("");
+  // Build transaction for signing
+  const buildTransaction = async (
+    type: "vote" | "claim" | "stake" | "swap",
+    data: any
+  ): Promise<FormattedTransaction> => {
+    // Load descriptor for formatting
+    const descriptor = await loadDescriptor();
+    const formatter = new ERC7730Formatter(descriptor);
 
-    try {
-      const [portfolio, governance, claimable] = await Promise.all([
-        getPortfolio(address),
-        getDaoVotes(address),
-        getClaimable(address),
-      ]);
+    // Mock transaction building - in production, encode real calldata
+    const functionName =
+      type === "vote" ? "castVote" : type === "claim" ? "claim" : type;
+    const fields = Object.entries(data).map(([key, value]) => ({
+      label: key.charAt(0).toUpperCase() + key.slice(1),
+      value: String(value),
+      rawValue: value,
+    }));
 
-      setPortfolioData(portfolio);
-      setGovernanceData(governance);
-      setClaimableData(claimable);
-    } catch (err: any) {
-      setError(err.message || "Failed to load dashboard data");
-    } finally {
-      setLoading(false);
-    }
+    return {
+      intent: `${type.charAt(0).toUpperCase() + type.slice(1)} Operation`,
+      functionName,
+      fields,
+    };
   };
 
-  const handleVote = (proposalId: string, support: boolean) => {
-    const proposal = governanceData?.proposals.find(
-      (p: any) => p.id === proposalId
-    );
+  const handleVote = async (proposalId: string, support: boolean) => {
+    const proposal = governance?.proposals.find((p) => p.id === proposalId);
     if (!proposal) return;
 
-    setActionFlow({
-      type: "vote",
-      data: {
-        proposalId,
-        support,
-        proposal,
-      },
+    const tx = await buildTransaction("vote", {
+      proposalId,
+      support: support ? "FOR" : "AGAINST",
+      proposal: proposal.title,
+      dao: proposal.dao,
     });
-    setShowLedger(true);
+
+    setTxToSign(tx);
   };
 
-  const handleClaim = (token: any) => {
-    setActionFlow({
-      type: "claim",
-      data: { token },
+  const handleClaim = async (token: any) => {
+    const tx = await buildTransaction("claim", {
+      token: token.symbol,
+      amount: ethers.formatUnits(token.amount, token.decimals),
+      tokenAddress: token.token,
     });
-    setShowLedger(true);
+
+    setTxToSign(tx);
   };
 
-  const handleTokenAction = (token: any, action: "stake" | "swap") => {
-    setActionFlow({
-      type: action,
-      data: { token },
+  const handleTokenAction = async (token: any, action: "stake" | "swap") => {
+    const tx = await buildTransaction(action, {
+      token: token.symbol,
+      amount: token.balance,
+      tokenAddress: token.token,
     });
-    setShowLedger(true);
-  };
 
-  const getLedgerFields = () => {
-    if (!actionFlow) return [];
-
-    switch (actionFlow.type) {
-      case "vote":
-        return [
-          { label: "Proposal ID", value: actionFlow.data.proposalId },
-          { label: "Proposal", value: actionFlow.data.proposal.title },
-          { label: "Vote", value: actionFlow.data.support ? "FOR" : "AGAINST" },
-          { label: "DAO", value: actionFlow.data.proposal.dao },
-        ];
-
-      case "claim":
-        return [
-          { label: "Token", value: actionFlow.data.token.symbol },
-          { label: "Amount", value: actionFlow.data.token.amount },
-          { label: "Token Address", value: actionFlow.data.token.token },
-        ];
-
-      case "stake":
-        return [
-          { label: "Action", value: "Stake Tokens" },
-          { label: "Token", value: actionFlow.data.token.symbol },
-          { label: "Amount", value: actionFlow.data.token.balance },
-        ];
-
-      case "swap":
-        return [
-          { label: "Action", value: "Swap Tokens" },
-          { label: "From Token", value: actionFlow.data.token.symbol },
-          { label: "Amount", value: actionFlow.data.token.balance },
-        ];
-
-      default:
-        return [];
-    }
-  };
-
-  const getIntent = () => {
-    if (!actionFlow) return "";
-
-    switch (actionFlow.type) {
-      case "vote":
-        return `Vote ${actionFlow.data.support ? "FOR" : "AGAINST"} proposal`;
-      case "claim":
-        return `Claim ${actionFlow.data.token.symbol} tokens`;
-      case "stake":
-        return `Stake ${actionFlow.data.token.symbol}`;
-      case "swap":
-        return `Swap ${actionFlow.data.token.symbol}`;
-      default:
-        return "";
-    }
-  };
-
-  const handleLedgerApprove = () => {
-    console.log("Transaction approved:", actionFlow);
-    setTimeout(() => {
-      setShowLedger(false);
-      setActionFlow(null);
-      alert("Transaction signed! (Mock)");
-    }, 1000);
-  };
-
-  const handleLedgerReject = () => {
-    console.log("Transaction rejected");
-    setTimeout(() => {
-      setShowLedger(false);
-      setActionFlow(null);
-    }, 1000);
+    setTxToSign(tx);
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <main className="min-h-screen" style={{ background: "#000000" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
         <div className="mb-8">
-          <Link
-            href="/"
-            className="text-sm text-gray-600 hover:text-gray-900 mb-4 inline-block"
+          <div
+            className="terminal-dim"
+            style={{ fontSize: "0.8rem", marginBottom: "0.5rem" }}
           >
-            ← Back to Home
-          </Link>
-          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
-            Digital Asset Dashboard
+            <a href="/" style={{ textDecoration: "none", color: "#00ff41" }}>
+              &lt; RETURN_TO_MAINFRAME
+            </a>
+          </div>
+          <h1
+            className="terminal-text terminal-glow"
+            style={{
+              fontSize: "3rem",
+              fontWeight: "bold",
+              marginBottom: "1rem",
+              letterSpacing: "0.1em",
+            }}
+          >
+            &gt; ASSET DASHBOARD
           </h1>
-          <p className="text-xl text-gray-600">
-            Track your portfolio, governance, and vesting with MultiBaAS
+          <p className="terminal-cyan" style={{ fontSize: "1.25rem" }}>
+            PORTFOLIO | GOVERNANCE | VESTING
           </p>
         </div>
 
-        {/* Address Input */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 mb-8">
-          <div className="flex gap-4">
-            <input
-              type="text"
-              placeholder="Enter Ethereum address (0x...)"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-            <button
-              onClick={loadDashboard}
-              disabled={loading}
-              className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        {/* Connection Section */}
+        {!isConnected && !useManualAddress ? (
+          <div
+            className="terminal-box"
+            style={{
+              padding: "3rem",
+              textAlign: "center",
+              border: "2px solid #00ffff",
+              marginBottom: "2rem",
+            }}
+          >
+            <div
+              className="terminal-amber terminal-glow"
+              style={{ fontSize: "4rem", marginBottom: "1rem" }}
             >
-              {loading ? "Loading..." : "Load Portfolio"}
-            </button>
-          </div>
-          {error && (
-            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-              {error}
+              [ ! ]
             </div>
-          )}
-        </div>
-
-        {/* Ledger Simulator Modal */}
-        {showLedger && actionFlow && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl p-8 max-w-2xl w-full">
-              <h2 className="text-2xl font-bold mb-6 text-gray-800">
-                Review Transaction
-              </h2>
-              <LedgerSimulator
-                intent={getIntent()}
-                functionName={actionFlow.type}
-                fields={getLedgerFields()}
-                onApprove={handleLedgerApprove}
-                onReject={handleLedgerReject}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Dashboard Data */}
-        {portfolioData && (
-          <div className="space-y-8">
-            {/* Portfolio Overview */}
-            <div>
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                Portfolio Overview
-              </h2>
-              <PortfolioCard
-                totalValueUSD={portfolioData.totalValueUSD}
-                tokenCount={portfolioData.tokens.length}
-                address={portfolioData.address}
-                lastUpdated={portfolioData.lastUpdated}
-              />
+            <h3
+              className="terminal-text"
+              style={{
+                fontSize: "1.5rem",
+                fontWeight: "bold",
+                marginBottom: "0.5rem",
+              }}
+            >
+              &gt; CONNECT WALLET
+            </h3>
+            <p
+              className="terminal-dim"
+              style={{ fontSize: "0.9rem", marginBottom: "2rem" }}
+            >
+              CONNECT METAMASK OR ENTER ADDRESS MANUALLY
+            </p>
+            <div
+              style={{
+                display: "flex",
+                gap: "1rem",
+                justifyContent: "center",
+                marginBottom: "2rem",
+              }}
+            >
+              <ConnectButton onConnect={connect} isConnecting={isConnecting} />
             </div>
 
-            {/* Token Holdings */}
-            <div className="bg-white rounded-2xl shadow-xl p-6">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                Token Holdings
-              </h2>
-              <TokenTable
-                tokens={portfolioData.tokens}
-                onAction={handleTokenAction}
-              />
-            </div>
-
-            {/* DAO Governance */}
-            {governanceData && (
-              <div className="bg-white rounded-2xl shadow-xl p-6">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                  DAO Governance
-                </h2>
-                <DAOVotes
-                  proposals={governanceData.proposals}
-                  votingPower={governanceData.votingPower}
-                  onVote={handleVote}
+            {/* Manual Address Entry */}
+            <div
+              style={{
+                maxWidth: "600px",
+                margin: "0 auto",
+                marginTop: "2rem",
+                paddingTop: "2rem",
+                borderTop: "1px solid #004d1a",
+              }}
+            >
+              <p
+                className="terminal-dim"
+                style={{ fontSize: "0.8rem", marginBottom: "1rem" }}
+              >
+                &gt;&gt; OR ENTER ADDRESS MANUALLY (MOCK DATA)
+              </p>
+              <div style={{ display: "flex", gap: "1rem" }}>
+                <input
+                  type="text"
+                  placeholder="0x..."
+                  value={manualAddress}
+                  onChange={(e) => setManualAddress(e.target.value)}
+                  className="terminal-input"
+                  style={{ flex: 1, fontSize: "0.9rem" }}
                 />
+                <button
+                  onClick={() => {
+                    if (
+                      manualAddress &&
+                      /^0x[a-fA-F0-9]{40}$/.test(manualAddress)
+                    ) {
+                      setUseManualAddress(true);
+                      setForceMock(true);
+                    }
+                  }}
+                  disabled={
+                    !manualAddress || !/^0x[a-fA-F0-9]{40}$/.test(manualAddress)
+                  }
+                  className="terminal-button"
+                  style={{
+                    padding: "0.75rem 2rem",
+                    fontSize: "0.9rem",
+                    borderColor: "#ffb000",
+                    color: "#ffb000",
+                    opacity:
+                      !manualAddress ||
+                      !/^0x[a-fA-F0-9]{40}$/.test(manualAddress)
+                        ? 0.5
+                        : 1,
+                  }}
+                >
+                  [LOAD]
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Connected Controls */}
+            <div
+              className="terminal-box"
+              style={{
+                padding: "1.5rem",
+                marginBottom: "2rem",
+                border: "2px solid #00ff41",
+              }}
+            >
+              <AddressDisplay address={activeAddress!} />
+              <div
+                style={{
+                  display: "flex",
+                  gap: "1rem",
+                  marginTop: "1rem",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                }}
+              >
+                {isConnected && (
+                  <>
+                    <label
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "16px",
+                          height: "16px",
+                          border: "2px solid #00ff41",
+                          background: forceMock ? "#00ff41" : "transparent",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {forceMock && (
+                          <span
+                            style={{
+                              color: "#000",
+                              fontSize: "12px",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            ✓
+                          </span>
+                        )}
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={forceMock}
+                        onChange={(e) => setForceMock(e.target.checked)}
+                        style={{
+                          position: "absolute",
+                          opacity: 0,
+                          pointerEvents: "none",
+                        }}
+                      />
+                      <span
+                        className="terminal-amber"
+                        style={{ fontSize: "0.8rem" }}
+                      >
+                        USE_MOCK_DATA
+                      </span>
+                    </label>
+                    <button
+                      onClick={disconnect}
+                      className="terminal-button"
+                      style={{
+                        padding: "0.5rem 1rem",
+                        fontSize: "0.75rem",
+                        borderColor: "#ff0040",
+                        color: "#ff0040",
+                      }}
+                    >
+                      [DISCONNECT_WALLET]
+                    </button>
+                  </>
+                )}
+                {useManualAddress && (
+                  <button
+                    onClick={() => {
+                      setUseManualAddress(false);
+                      setManualAddress("");
+                      setForceMock(false);
+                    }}
+                    className="terminal-button"
+                    style={{
+                      padding: "0.5rem 1rem",
+                      fontSize: "0.75rem",
+                      borderColor: "#ff0040",
+                      color: "#ff0040",
+                    }}
+                  >
+                    [CLEAR_ADDRESS]
+                  </button>
+                )}
+                {(forceMock || useManualAddress) && (
+                  <span
+                    className="terminal-amber"
+                    style={{ fontSize: "0.75rem" }}
+                  >
+                    [MOCK_MODE]
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Error Display */}
+            {error && (
+              <div
+                className="terminal-box"
+                style={{
+                  padding: "1.5rem",
+                  border: "2px solid #ff0040",
+                  marginBottom: "2rem",
+                }}
+              >
+                <p className="terminal-red" style={{ fontWeight: 600 }}>
+                  &gt;&gt; ERROR: {error}
+                </p>
               </div>
             )}
 
-            {/* Vesting & Claimable */}
-            {claimableData && claimableData.claimableTokens.length > 0 && (
-              <div className="bg-white rounded-2xl shadow-xl p-6">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                  Vesting & Claimable Tokens
-                </h2>
-                <div className="mb-4 p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg">
-                  <div className="text-sm text-gray-600">
-                    Total Claimable Value
-                  </div>
-                  <div className="text-3xl font-bold text-gray-800">
-                    $
-                    {claimableData.totalClaimableUSD.toLocaleString("en-US", {
-                      minimumFractionDigits: 2,
-                    })}
+            {/* Loading State */}
+            {loading && (
+              <div
+                className="terminal-box"
+                style={{
+                  padding: "2rem",
+                  textAlign: "center",
+                  border: "1px solid #00ff41",
+                  marginBottom: "2rem",
+                }}
+              >
+                <div
+                  className="terminal-dim ascii-spinner"
+                  style={{ fontSize: "0.9rem" }}
+                >
+                  LOADING DASHBOARD DATA...
+                </div>
+              </div>
+            )}
+
+            {/* Dashboard Content */}
+            {portfolio && !loading && (
+              <div className="space-y-8">
+                {/* Access Banner */}
+                <div
+                  className="terminal-box"
+                  style={{
+                    padding: "1rem",
+                    border: "2px solid #00ff41",
+                    textAlign: "center",
+                  }}
+                >
+                  <div
+                    className="terminal-text terminal-glow"
+                    style={{ fontSize: "1.5rem", letterSpacing: "0.2em" }}
+                  >
+                    &gt;&gt;&gt; ACCESS GRANTED &lt;&lt;&lt;
                   </div>
                 </div>
-                <VestingTimeline
-                  claimableTokens={claimableData.claimableTokens}
-                  onClaim={handleClaim}
-                />
+
+                {/* Portfolio */}
+                <div>
+                  <h2
+                    className="terminal-text"
+                    style={{
+                      fontSize: "1.5rem",
+                      fontWeight: "bold",
+                      marginBottom: "1rem",
+                      letterSpacing: "0.1em",
+                    }}
+                  >
+                    &gt; PORTFOLIO_OVERVIEW
+                  </h2>
+                  <PortfolioCard
+                    totalValueUSD={portfolio.totalValueUSD}
+                    tokenCount={portfolio.tokens.length}
+                    address={portfolio.address}
+                    lastUpdated={portfolio.lastUpdated}
+                  />
+                </div>
+
+                {/* Tokens */}
+                <div>
+                  <h2
+                    className="terminal-text"
+                    style={{
+                      fontSize: "1.5rem",
+                      fontWeight: "bold",
+                      marginBottom: "1rem",
+                      letterSpacing: "0.1em",
+                    }}
+                  >
+                    &gt; TOKEN_HOLDINGS
+                  </h2>
+                  <TokenTable
+                    tokens={portfolio.tokens}
+                    onAction={handleTokenAction}
+                  />
+                </div>
+
+                {/* Governance */}
+                {governance && (
+                  <div>
+                    <h2
+                      className="terminal-text"
+                      style={{
+                        fontSize: "1.5rem",
+                        fontWeight: "bold",
+                        marginBottom: "1rem",
+                        letterSpacing: "0.1em",
+                      }}
+                    >
+                      &gt; DAO_GOVERNANCE
+                    </h2>
+                    <DAOVotes
+                      proposals={governance.proposals}
+                      votingPower={governance.votingPower}
+                      onVote={handleVote}
+                    />
+                  </div>
+                )}
+
+                {/* Vesting */}
+                {vesting && vesting.claimableTokens.length > 0 && (
+                  <div>
+                    <h2
+                      className="terminal-text"
+                      style={{
+                        fontSize: "1.5rem",
+                        fontWeight: "bold",
+                        marginBottom: "1rem",
+                        letterSpacing: "0.1em",
+                      }}
+                    >
+                      &gt; VESTING_SCHEDULE
+                    </h2>
+                    <div
+                      className="terminal-box"
+                      style={{
+                        marginBottom: "1rem",
+                        padding: "1rem",
+                        border: "1px solid #00ff41",
+                      }}
+                    >
+                      <div
+                        className="terminal-dim"
+                        style={{ fontSize: "0.8rem", marginBottom: "0.25rem" }}
+                      >
+                        &gt; TOTAL CLAIMABLE
+                      </div>
+                      <div
+                        className="terminal-cyan terminal-glow"
+                        style={{ fontSize: "2rem", fontWeight: "bold" }}
+                      >
+                        $
+                        {vesting.totalClaimableUSD.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                        })}
+                      </div>
+                    </div>
+                    <VestingTimeline
+                      claimableTokens={vesting.claimableTokens}
+                      onClaim={handleClaim}
+                    />
+                  </div>
+                )}
               </div>
             )}
-          </div>
-        )}
-
-        {/* Empty State */}
-        {!portfolioData && !loading && (
-          <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
-            <div className="text-6xl mb-4">📊</div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-2">
-              Enter an address to get started
-            </h3>
-            <p className="text-gray-600">
-              View portfolio balances, DAO votes, and vesting schedules all in
-              one place
-            </p>
-          </div>
+          </>
         )}
       </div>
+
+      {/* Signing Modal */}
+      {txToSign && (
+        <SigningModal
+          transaction={txToSign}
+          provider={provider}
+          onClose={() => setTxToSign(null)}
+          onSigned={(sig) => {
+            console.log("Transaction signed:", sig);
+            setTxToSign(null);
+          }}
+        />
+      )}
     </main>
   );
 }

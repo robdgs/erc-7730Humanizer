@@ -59,68 +59,136 @@ export default function CalldataDecoder() {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-      <div className="p-8">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-          Decode Transaction Calldata
-        </h2>
+    <div
+      className="terminal-box"
+      style={{ padding: "2rem", border: "2px solid #00ff41" }}
+    >
+      <h2
+        className="terminal-text"
+        style={{
+          fontSize: "1.5rem",
+          fontWeight: 600,
+          marginBottom: "1.5rem",
+          letterSpacing: "0.1em",
+        }}
+      >
+        &gt; DECODE_TRANSACTION_CALLDATA
+      </h2>
 
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Transaction Calldata (hex)
-          </label>
-          <textarea
-            value={calldata}
-            onChange={(e) => setCalldata(e.target.value)}
-            placeholder="0x..."
-            className="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
-          />
-        </div>
-
-        <div className="flex flex-wrap gap-3 mb-6">
-          <button
-            onClick={handleDecode}
-            disabled={isLoading}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-          >
-            {isLoading ? "Decoding..." : "🔍 Decode Calldata"}
-          </button>
-
-          <div className="flex-1" />
-
-          <button
-            onClick={() => loadExample("swap")}
-            disabled={isLoading}
-            className="px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-sm font-medium"
-          >
-            📝 Example: Swap
-          </button>
-
-          <button
-            onClick={() => loadExample("addLiquidity")}
-            disabled={isLoading}
-            className="px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-sm font-medium"
-          >
-            📝 Example: Add Liquidity
-          </button>
-
-          <button
-            onClick={() => loadExample("transfer")}
-            disabled={isLoading}
-            className="px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-sm font-medium"
-          >
-            📝 Example: Transfer
-          </button>
-        </div>
-
-        {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-700 text-sm font-medium">❌ {error}</p>
-          </div>
-        )}
-
-        {decodedTx && <TransactionPreview transaction={decodedTx} />}
+      <div style={{ marginBottom: "1.5rem" }}>
+        <label
+          className="terminal-dim"
+          style={{
+            display: "block",
+            fontSize: "0.75rem",
+            marginBottom: "0.5rem",
+            letterSpacing: "0.1em",
+          }}
+        >
+          &gt; TRANSACTION_CALLDATA_HEX
+        </label>
+        <textarea
+          value={calldata}
+          onChange={(e) => setCalldata(e.target.value)}
+          placeholder="0x..."
+          className="terminal-input"
+          style={{
+            width: "100%",
+            height: "120px",
+            fontSize: "0.85rem",
+            resize: "vertical",
+          }}
+        />
       </div>
+
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "0.75rem",
+          marginBottom: "1.5rem",
+        }}
+      >
+        <button
+          onClick={handleDecode}
+          disabled={isLoading}
+          className="terminal-button"
+          style={{
+            padding: "0.75rem 1.5rem",
+            fontSize: "0.9rem",
+            opacity: isLoading ? 0.5 : 1,
+            cursor: isLoading ? "not-allowed" : "pointer",
+          }}
+        >
+          {isLoading ? "[DECODING...]" : "[DECODE_CALLDATA]"}
+        </button>
+
+        <div style={{ flex: 1 }} />
+
+        <button
+          onClick={() => loadExample("swap")}
+          disabled={isLoading}
+          className="terminal-button"
+          style={{
+            padding: "0.75rem 1rem",
+            fontSize: "0.75rem",
+            borderColor: "#004d1a",
+            color: "#00ff41",
+            opacity: isLoading ? 0.5 : 1,
+            cursor: isLoading ? "not-allowed" : "pointer",
+          }}
+        >
+          &gt; SWAP
+        </button>
+
+        <button
+          onClick={() => loadExample("addLiquidity")}
+          disabled={isLoading}
+          className="terminal-button"
+          style={{
+            padding: "0.75rem 1rem",
+            fontSize: "0.75rem",
+            borderColor: "#004d1a",
+            color: "#00ff41",
+            opacity: isLoading ? 0.5 : 1,
+            cursor: isLoading ? "not-allowed" : "pointer",
+          }}
+        >
+          &gt; ADD_LIQUIDITY
+        </button>
+
+        <button
+          onClick={() => loadExample("transfer")}
+          disabled={isLoading}
+          className="terminal-button"
+          style={{
+            padding: "0.75rem 1rem",
+            fontSize: "0.75rem",
+            borderColor: "#004d1a",
+            color: "#00ff41",
+            opacity: isLoading ? 0.5 : 1,
+            cursor: isLoading ? "not-allowed" : "pointer",
+          }}
+        >
+          &gt; TRANSFER
+        </button>
+      </div>
+
+      {error && (
+        <div
+          className="terminal-red"
+          style={{
+            marginBottom: "1.5rem",
+            padding: "1rem",
+            border: "1px solid #ff0040",
+            fontSize: "0.85rem",
+          }}
+        >
+          &gt;&gt; ERROR: {error}
+        </div>
+      )}
+
+      {decodedTx && <TransactionPreview transaction={decodedTx} />}
     </div>
   );
 }

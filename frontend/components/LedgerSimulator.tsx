@@ -59,9 +59,14 @@ export default function LedgerSimulator({
       <div className="ledger-device approved">
         <div className="ledger-screen">
           <div className="text-center">
-            <div className="text-4xl mb-2">✓</div>
-            <div className="text-sm font-mono">Transaction</div>
-            <div className="text-sm font-mono">Approved</div>
+            <div
+              className="terminal-glow"
+              style={{ fontSize: "2rem", marginBottom: "0.5rem" }}
+            >
+              [✓]
+            </div>
+            <div className="terminal-text">TRANSACTION</div>
+            <div className="terminal-text">APPROVED</div>
           </div>
         </div>
       </div>
@@ -73,9 +78,14 @@ export default function LedgerSimulator({
       <div className="ledger-device rejected">
         <div className="ledger-screen">
           <div className="text-center">
-            <div className="text-4xl mb-2">✗</div>
-            <div className="text-sm font-mono">Transaction</div>
-            <div className="text-sm font-mono">Rejected</div>
+            <div
+              className="terminal-red"
+              style={{ fontSize: "2rem", marginBottom: "0.5rem" }}
+            >
+              [✗]
+            </div>
+            <div className="terminal-red">TRANSACTION</div>
+            <div className="terminal-red">REJECTED</div>
           </div>
         </div>
       </div>
@@ -88,34 +98,54 @@ export default function LedgerSimulator({
     <div className="flex flex-col items-center">
       <div className="ledger-device">
         <div className="ledger-header">
-          <div className="ledger-logo">LEDGER</div>
-          <div className="ledger-model">Nano X</div>
+          <div className="ledger-logo terminal-text terminal-glow">LEDGER</div>
+          <div className="ledger-model">NANO X</div>
         </div>
 
         <div className="ledger-screen">
           {currentFieldIndex === 0 ? (
             <div className="text-center">
-              <div className="text-xs font-mono text-gray-500 mb-2">
-                Review transaction
+              <div
+                className="terminal-dim"
+                style={{ fontSize: "0.7rem", marginBottom: "0.5rem" }}
+              >
+                &gt; REVIEW TRANSACTION
               </div>
-              <div className="text-sm font-mono font-bold">{intent}</div>
-              <div className="text-xs font-mono mt-1 text-gray-600">
-                {functionName}
+              <div
+                className="terminal-text terminal-glow"
+                style={{ fontSize: "0.9rem", fontWeight: "bold" }}
+              >
+                {intent}
+              </div>
+              <div
+                className="terminal-dim"
+                style={{ fontSize: "0.75rem", marginTop: "0.5rem" }}
+              >
+                [{functionName}()]
               </div>
             </div>
           ) : (
             <div>
-              <div className="text-xs font-mono text-gray-500 mb-1">
-                {currentField.label}
+              <div
+                className="terminal-dim"
+                style={{ fontSize: "0.7rem", marginBottom: "0.25rem" }}
+              >
+                &gt; {currentField.label}
               </div>
-              <div className="text-sm font-mono break-all">
+              <div
+                className="terminal-text"
+                style={{ fontSize: "0.85rem", wordBreak: "break-all" }}
+              >
                 {currentField.value}
               </div>
             </div>
           )}
 
-          <div className="text-xs text-center mt-3 text-gray-400">
-            {currentFieldIndex + 1} / {fields.length + 1}
+          <div
+            className="terminal-dim text-center"
+            style={{ fontSize: "0.7rem", marginTop: "1rem" }}
+          >
+            [{currentFieldIndex + 1}/{fields.length + 1}]
           </div>
         </div>
 
@@ -140,36 +170,41 @@ export default function LedgerSimulator({
       <div className="mt-6 flex gap-4">
         <button
           onClick={handleReject}
-          className="px-8 py-3 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg transition-colors"
+          className="terminal-button"
+          style={{ borderColor: "#ff0040", color: "#ff0040" }}
         >
-          ✗ Reject
+          [ REJECT ]
         </button>
         <button
           onClick={handleApprove}
-          className="px-8 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition-colors"
+          className="terminal-button"
+          style={{ borderColor: "#00ff41", color: "#00ff41" }}
         >
-          ✓ Approve
+          [ APPROVE ]
         </button>
       </div>
 
       <style jsx>{`
         .ledger-device {
-          width: 320px;
-          background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-          border-radius: 16px;
+          width: 340px;
+          background: #0a0a0a;
+          border-radius: 4px;
           padding: 20px;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-          border: 2px solid #404040;
+          box-shadow: 0 0 20px rgba(0, 255, 65, 0.3),
+            inset 0 0 30px rgba(0, 255, 65, 0.05);
+          border: 2px solid #004d1a;
         }
 
         .ledger-device.approved {
-          border-color: #10b981;
-          box-shadow: 0 10px 40px rgba(16, 185, 129, 0.3);
+          border-color: #00ff41;
+          box-shadow: 0 0 30px rgba(0, 255, 65, 0.5),
+            inset 0 0 30px rgba(0, 255, 65, 0.1);
         }
 
         .ledger-device.rejected {
-          border-color: #ef4444;
-          box-shadow: 0 10px 40px rgba(239, 68, 68, 0.3);
+          border-color: #ff0040;
+          box-shadow: 0 0 30px rgba(255, 0, 64, 0.5),
+            inset 0 0 30px rgba(255, 0, 64, 0.1);
         }
 
         .ledger-header {
@@ -177,63 +212,86 @@ export default function LedgerSimulator({
           justify-content: space-between;
           align-items: center;
           margin-bottom: 16px;
+          padding-bottom: 12px;
+          border-bottom: 1px solid #004d1a;
         }
 
         .ledger-logo {
           font-size: 14px;
           font-weight: bold;
-          color: #ffffff;
-          letter-spacing: 2px;
+          letter-spacing: 3px;
         }
 
         .ledger-model {
           font-size: 10px;
-          color: #888;
+          color: #004d1a;
           text-transform: uppercase;
+          letter-spacing: 1px;
         }
 
         .ledger-screen {
-          background: #000;
-          border-radius: 8px;
+          background: #000000;
+          border-radius: 2px;
           padding: 20px;
-          min-height: 120px;
+          min-height: 140px;
           display: flex;
           flex-direction: column;
           justify-content: center;
-          color: #fff;
-          font-family: "Courier New", monospace;
-          border: 1px solid #333;
+          border: 2px solid #00ff41;
+          box-shadow: 0 0 10px rgba(0, 255, 65, 0.3),
+            inset 0 0 20px rgba(0, 255, 65, 0.05);
+          position: relative;
+        }
+
+        .ledger-screen::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: repeating-linear-gradient(
+            0deg,
+            rgba(0, 255, 65, 0.03) 0px,
+            transparent 1px,
+            transparent 2px,
+            rgba(0, 255, 65, 0.03) 3px
+          );
+          pointer-events: none;
         }
 
         .ledger-buttons {
           display: flex;
           justify-content: space-between;
           margin-top: 16px;
+          gap: 8px;
         }
 
         .ledger-button {
           width: 50px;
           height: 50px;
-          border-radius: 50%;
-          background: #404040;
-          border: 2px solid #555;
-          color: #fff;
-          font-size: 18px;
+          border-radius: 2px;
+          background: #000000;
+          border: 2px solid #00ff41;
+          color: #00ff41;
+          font-size: 16px;
           cursor: pointer;
           transition: all 0.2s;
           display: flex;
           align-items: center;
           justify-content: center;
+          text-shadow: 0 0 5px #00ff41;
         }
 
         .ledger-button:hover {
-          background: #505050;
-          border-color: #666;
-          transform: scale(1.05);
+          background: #00ff41;
+          color: #000000;
+          box-shadow: 0 0 15px rgba(0, 255, 65, 0.6);
+          transform: translateY(-2px);
         }
 
         .ledger-button:active {
-          transform: scale(0.95);
+          transform: translateY(0);
         }
       `}</style>
     </div>

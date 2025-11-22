@@ -17,8 +17,24 @@ interface TokenTableProps {
 
 export default function TokenTable({ tokens, onAction }: TokenTableProps) {
   const formatBalance = (balance: string, decimals: number): string => {
-    const value = BigInt(balance) / BigInt(10 ** decimals);
-    return value.toString();
+    // Check if balance is already formatted (contains decimal point)
+    if (balance.includes(".")) {
+      // Already formatted, just parse and format nicely
+      const num = parseFloat(balance);
+      return num.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 6,
+      });
+    }
+
+    // Raw BigInt format - convert properly
+    try {
+      const value = BigInt(balance) / BigInt(10 ** decimals);
+      return value.toString();
+    } catch {
+      // Fallback if conversion fails
+      return balance;
+    }
   };
 
   const formatUSD = (value?: number): string => {
@@ -30,21 +46,64 @@ export default function TokenTable({ tokens, onAction }: TokenTableProps) {
   };
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full">
+    <div className="terminal-box" style={{ padding: "1rem" }}>
+      <div
+        style={{
+          borderBottom: "1px solid #00ff41",
+          marginBottom: "1rem",
+          paddingBottom: "0.5rem",
+        }}
+      ></div>
+      <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>
-          <tr className="border-b border-gray-200">
-            <th className="text-left py-3 px-4 font-semibold text-gray-700">
-              Token
+          <tr style={{ borderBottom: "1px solid #004d1a" }}>
+            <th
+              className="terminal-text"
+              style={{
+                textAlign: "left",
+                padding: "0.75rem 1rem",
+                fontSize: "0.75rem",
+                fontWeight: 600,
+                letterSpacing: "0.1em",
+              }}
+            >
+              TOKEN
             </th>
-            <th className="text-right py-3 px-4 font-semibold text-gray-700">
-              Balance
+            <th
+              className="terminal-text"
+              style={{
+                textAlign: "right",
+                padding: "0.75rem 1rem",
+                fontSize: "0.75rem",
+                fontWeight: 600,
+                letterSpacing: "0.1em",
+              }}
+            >
+              BALANCE
             </th>
-            <th className="text-right py-3 px-4 font-semibold text-gray-700">
-              Value (USD)
+            <th
+              className="terminal-text"
+              style={{
+                textAlign: "right",
+                padding: "0.75rem 1rem",
+                fontSize: "0.75rem",
+                fontWeight: 600,
+                letterSpacing: "0.1em",
+              }}
+            >
+              VALUE
             </th>
-            <th className="text-right py-3 px-4 font-semibold text-gray-700">
-              Actions
+            <th
+              className="terminal-text"
+              style={{
+                textAlign: "right",
+                padding: "0.75rem 1rem",
+                fontSize: "0.75rem",
+                fontWeight: 600,
+                letterSpacing: "0.1em",
+              }}
+            >
+              ACTION
             </th>
           </tr>
         </thead>
@@ -52,43 +111,96 @@ export default function TokenTable({ tokens, onAction }: TokenTableProps) {
           {tokens.map((token, idx) => (
             <tr
               key={idx}
-              className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
+              style={{ borderBottom: "1px solid #004d1a" }}
+              className="hover:bg-opacity-10"
             >
-              <td className="py-4 px-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold text-sm">
+              <td style={{ padding: "1rem" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.75rem",
+                  }}
+                >
+                  <div
+                    className="terminal-text terminal-glow"
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      border: "2px solid #00ff41",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "0.75rem",
+                      fontWeight: "bold",
+                    }}
+                  >
                     {token.symbol.substring(0, 2)}
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-800">
+                    <div
+                      className="terminal-text"
+                      style={{ fontWeight: 600, fontSize: "0.9rem" }}
+                    >
                       {token.symbol}
                     </div>
-                    <div className="text-xs text-gray-500 font-mono">
+                    <div
+                      className="terminal-dim"
+                      style={{ fontSize: "0.7rem" }}
+                    >
                       {token.token.substring(0, 6)}...
                       {token.token.substring(38)}
                     </div>
                   </div>
                 </div>
               </td>
-              <td className="py-4 px-4 text-right font-mono text-gray-800">
+              <td
+                className="terminal-text"
+                style={{
+                  padding: "1rem",
+                  textAlign: "right",
+                  fontSize: "0.9rem",
+                }}
+              >
                 {formatBalance(token.balance, token.decimals)}
               </td>
-              <td className="py-4 px-4 text-right font-semibold text-gray-800">
+              <td
+                className="terminal-cyan"
+                style={{
+                  padding: "1rem",
+                  textAlign: "right",
+                  fontWeight: 600,
+                  fontSize: "0.9rem",
+                }}
+              >
                 {formatUSD(token.valueUSD)}
               </td>
-              <td className="py-4 px-4 text-right">
-                <div className="flex gap-2 justify-end">
+              <td style={{ padding: "1rem", textAlign: "right" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "0.5rem",
+                    justifyContent: "flex-end",
+                  }}
+                >
                   <button
                     onClick={() => onAction?.(token, "stake")}
-                    className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded transition-colors"
+                    className="terminal-button"
+                    style={{ padding: "0.25rem 0.75rem", fontSize: "0.7rem" }}
                   >
-                    Stake
+                    [STAKE]
                   </button>
                   <button
                     onClick={() => onAction?.(token, "swap")}
-                    className="px-3 py-1 bg-purple-500 hover:bg-purple-600 text-white text-sm rounded transition-colors"
+                    className="terminal-button"
+                    style={{
+                      padding: "0.25rem 0.75rem",
+                      fontSize: "0.7rem",
+                      borderColor: "#00ffff",
+                      color: "#00ffff",
+                    }}
                   >
-                    Swap
+                    [SWAP]
                   </button>
                 </div>
               </td>
@@ -96,6 +208,14 @@ export default function TokenTable({ tokens, onAction }: TokenTableProps) {
           ))}
         </tbody>
       </table>
+
+      <div
+        style={{
+          borderTop: "1px solid #00ff41",
+          marginTop: "1rem",
+          paddingTop: "0.5rem",
+        }}
+      ></div>
     </div>
   );
 }

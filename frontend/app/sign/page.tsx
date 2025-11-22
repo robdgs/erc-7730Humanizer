@@ -282,50 +282,121 @@ export default function SignPage() {
   const exampleCalldata = generateExampleCalldata();
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <main className="min-h-screen" style={{ background: "#000000" }}>
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Hardware Secure Signing
+          <h1
+            className="terminal-text terminal-glow"
+            style={{
+              fontSize: "2.5rem",
+              fontWeight: "bold",
+              marginBottom: "1rem",
+              letterSpacing: "0.15em",
+            }}
+          >
+            &gt;&gt; HARDWARE SECURE SIGNING
           </h1>
-          <p className="text-xl text-gray-600">
-            Sign transactions with Ledger integration & ERC-7730 human-readable
-            display
+          <p
+            className="terminal-cyan"
+            style={{ fontSize: "1.1rem", letterSpacing: "0.05em" }}
+          >
+            LEDGER INTEGRATION :: ERC-7730 PROTOCOL :: AIR-GAPPED SIGNING
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "2rem",
+          }}
+        >
           {/* Left Column - Input */}
-          <div className="space-y-6">
-            <div className="bg-white rounded-2xl shadow-xl p-8">
-              <h2 className="text-2xl font-bold mb-4 text-gray-800">
-                📝 Transaction Calldata
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}
+          >
+            <div
+              className="terminal-box"
+              style={{ padding: "2rem", border: "2px solid #00ff41" }}
+            >
+              <div
+                className="terminal-dim"
+                style={{
+                  fontSize: "0.8rem",
+                  marginBottom: "1rem",
+                  letterSpacing: "0.1em",
+                }}
+              >
+                ┌─ TRANSACTION CALLDATA ────────────────────────────┐
+              </div>
+
+              <h2
+                className="terminal-text"
+                style={{
+                  fontSize: "1.25rem",
+                  fontWeight: "bold",
+                  marginBottom: "1rem",
+                }}
+              >
+                &gt; INPUT_DATA
               </h2>
 
-              <div className="mb-4">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Paste Calldata (hex)
+              <div style={{ marginBottom: "1rem" }}>
+                <label
+                  className="terminal-dim"
+                  style={{
+                    display: "block",
+                    fontSize: "0.75rem",
+                    marginBottom: "0.5rem",
+                    letterSpacing: "0.1em",
+                  }}
+                >
+                  &gt; PASTE_CALLDATA_HEX
                 </label>
                 <textarea
                   value={calldata}
                   onChange={(e) => setCalldata(e.target.value)}
                   placeholder="0x1760feec..."
-                  className="w-full h-32 px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none font-mono text-sm"
+                  className="terminal-input"
+                  style={{
+                    width: "100%",
+                    height: "120px",
+                    fontSize: "0.8rem",
+                    resize: "none",
+                  }}
                 />
               </div>
 
               <button
                 onClick={decodeCalldata}
-                className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
+                className="terminal-button"
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  fontSize: "0.9rem",
+                }}
               >
-                Decode Transaction
+                [DECODE_TRANSACTION]
               </button>
 
-              <div className="mt-6">
-                <p className="text-sm font-semibold text-gray-700 mb-3">
-                  Quick Examples:
+              <div style={{ marginTop: "1.5rem" }}>
+                <p
+                  className="terminal-dim"
+                  style={{
+                    fontSize: "0.75rem",
+                    marginBottom: "0.75rem",
+                    letterSpacing: "0.1em",
+                  }}
+                >
+                  &gt; QUICK_EXAMPLES:
                 </p>
-                <div className="space-y-2">
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.5rem",
+                  }}
+                >
                   {exampleCalldata.length > 0 ? (
                     exampleCalldata.map((example, index) => (
                       <button
@@ -335,38 +406,77 @@ export default function SignPage() {
                           setError("");
                           setDecodedTx(null);
                         }}
-                        className="w-full text-left px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg text-sm transition-colors"
+                        className="terminal-button"
+                        style={{
+                          width: "100%",
+                          textAlign: "left",
+                          padding: "0.5rem 1rem",
+                          fontSize: "0.75rem",
+                          borderColor: "#004d1a",
+                        }}
                       >
-                        <span className="font-medium text-gray-800">
-                          {example.name}
-                        </span>
+                        &gt; {example.name}
                       </button>
                     ))
                   ) : (
-                    <div className="text-sm text-gray-500 italic">
-                      Loading examples...
+                    <div
+                      className="terminal-dim ascii-spinner"
+                      style={{ fontSize: "0.75rem" }}
+                    >
+                      LOADING EXAMPLES
                     </div>
                   )}
                 </div>
               </div>
+
+              <div
+                className="terminal-dim"
+                style={{
+                  fontSize: "0.8rem",
+                  marginTop: "1.5rem",
+                  letterSpacing: "0.1em",
+                }}
+              >
+                └───────────────────────────────────────────────────┘
+              </div>
             </div>
 
             {/* Ledger Connection */}
-            <div className="bg-white rounded-2xl shadow-xl p-8">
-              <h2 className="text-2xl font-bold mb-4 text-gray-800">
-                🔌 Ledger Connection
+            <div
+              className="terminal-box"
+              style={{ padding: "2rem", border: "1px solid #00ffff" }}
+            >
+              <h2
+                className="terminal-cyan"
+                style={{
+                  fontSize: "1.25rem",
+                  fontWeight: "bold",
+                  marginBottom: "1rem",
+                }}
+              >
+                &gt; LEDGER_CONNECTION
               </h2>
 
-              <div className="mb-4">
-                <label className="flex items-center gap-2 cursor-pointer">
+              <div style={{ marginBottom: "1rem" }}>
+                <label
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    cursor: "pointer",
+                  }}
+                >
                   <input
                     type="checkbox"
                     checked={useLedgerDevice}
                     onChange={(e) => setUseLedgerDevice(e.target.checked)}
-                    className="w-4 h-4"
+                    style={{ width: "16px", height: "16px" }}
                   />
-                  <span className="text-sm text-gray-700">
-                    Use real Ledger device (WebUSB)
+                  <span
+                    className="terminal-cyan"
+                    style={{ fontSize: "0.8rem" }}
+                  >
+                    USE_REAL_DEVICE (WebUSB)
                   </span>
                 </label>
               </div>
@@ -383,41 +493,107 @@ export default function SignPage() {
               )}
 
               {!useLedgerDevice && (
-                <div className="text-sm text-gray-600 bg-blue-50 p-4 rounded-lg">
-                  💡 Simulation mode active. Enable checkbox above to connect
-                  real Ledger device.
+                <div
+                  className="terminal-dim"
+                  style={{
+                    fontSize: "0.75rem",
+                    padding: "1rem",
+                    border: "1px solid #004d1a",
+                  }}
+                >
+                  &gt;&gt; SIMULATION MODE ACTIVE
+                  <br />
+                  &gt;&gt; ENABLE CHECKBOX FOR REAL DEVICE
                 </div>
               )}
             </div>
           </div>
 
           {/* Right Column - Display */}
-          <div className="space-y-6">
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}
+          >
             {error && (
-              <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-6">
-                <p className="text-red-700 font-semibold">❌ {error}</p>
+              <div
+                className="terminal-box"
+                style={{ padding: "1.5rem", border: "2px solid #ff0040" }}
+              >
+                <p className="terminal-red" style={{ fontWeight: 600 }}>
+                  &gt;&gt; ERROR: {error}
+                </p>
               </div>
             )}
 
             {decodedTx && (
-              <div className="bg-white rounded-2xl shadow-xl p-8">
-                <h2 className="text-2xl font-bold mb-4 text-gray-800">
-                  ✨ Human-Readable Preview
+              <div
+                className="terminal-box"
+                style={{ padding: "2rem", border: "2px solid #00ffff" }}
+              >
+                <div
+                  className="terminal-dim"
+                  style={{
+                    fontSize: "0.8rem",
+                    marginBottom: "1rem",
+                    letterSpacing: "0.1em",
+                  }}
+                >
+                  ┌─ DECODED OUTPUT ──────────────────────────────────┐
+                </div>
+
+                <h2
+                  className="terminal-cyan"
+                  style={{
+                    fontSize: "1.25rem",
+                    fontWeight: "bold",
+                    marginBottom: "1.5rem",
+                  }}
+                >
+                  &gt; HUMAN_READABLE_PREVIEW
                 </h2>
 
-                <div className="mb-6 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-2 border-blue-200">
-                  <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
-                    Transaction Intent
+                <div
+                  className="terminal-box"
+                  style={{
+                    marginBottom: "1.5rem",
+                    padding: "1.5rem",
+                    border: "2px solid #00ff41",
+                  }}
+                >
+                  <div
+                    className="terminal-dim"
+                    style={{
+                      fontSize: "0.7rem",
+                      marginBottom: "0.5rem",
+                      letterSpacing: "0.1em",
+                    }}
+                  >
+                    &gt;&gt; TRANSACTION_INTENT
                   </div>
-                  <div className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+                  <div
+                    className="terminal-text terminal-glow"
+                    style={{
+                      fontSize: "2rem",
+                      fontWeight: "bold",
+                      marginBottom: "0.5rem",
+                    }}
+                  >
                     {decodedTx.intent}
                   </div>
-                  <div className="text-sm text-gray-600 mt-2 font-mono bg-white/50 px-3 py-1 rounded inline-block">
-                    {decodedTx.functionName}()
+                  <div
+                    className="terminal-dim"
+                    style={{ fontSize: "0.8rem", marginTop: "0.5rem" }}
+                  >
+                    [{decodedTx.functionName}()]
                   </div>
                 </div>
 
-                <div className="space-y-4">
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "1rem",
+                  }}
+                >
                   {decodedTx.fields.map((field, index) => {
                     const isAmount = field.label
                       .toLowerCase()
@@ -432,19 +608,44 @@ export default function SignPage() {
                     return (
                       <div
                         key={index}
-                        className="group p-5 bg-gradient-to-br from-gray-50 to-white rounded-xl border-2 border-gray-200 hover:border-blue-300 transition-all"
+                        className="terminal-box"
+                        style={{ padding: "1rem", border: "1px solid #004d1a" }}
                       >
-                        <div className="flex items-start justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            {isAmount && <span className="text-xl">💰</span>}
-                            {isAddress && <span className="text-xl">🏦</span>}
-                            {isTime && <span className="text-xl">⏰</span>}
-                            <div className="text-sm font-bold text-gray-700 uppercase tracking-wide">
-                              {field.label}
-                            </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "start",
+                            gap: "0.5rem",
+                            marginBottom: "0.5rem",
+                          }}
+                        >
+                          {isAmount && (
+                            <span className="terminal-amber">$</span>
+                          )}
+                          {isAddress && (
+                            <span className="terminal-cyan">@</span>
+                          )}
+                          {isTime && <span className="terminal-amber">⏱</span>}
+                          <div
+                            className="terminal-dim"
+                            style={{
+                              fontSize: "0.7rem",
+                              letterSpacing: "0.1em",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {field.label.toUpperCase()}
                           </div>
                         </div>
-                        <div className="text-lg font-semibold text-gray-900 break-all pl-7">
+                        <div
+                          className="terminal-text"
+                          style={{
+                            fontSize: "1rem",
+                            fontWeight: 600,
+                            wordBreak: "break-all",
+                            marginLeft: "1.5rem",
+                          }}
+                        >
                           {field.value}
                         </div>
                       </div>
@@ -454,17 +655,48 @@ export default function SignPage() {
 
                 <button
                   onClick={handleSign}
-                  className="w-full mt-6 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-lg rounded-xl transition-all transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
+                  className="terminal-button"
+                  style={{
+                    width: "100%",
+                    marginTop: "1.5rem",
+                    padding: "1rem",
+                    fontSize: "1rem",
+                    fontWeight: "bold",
+                    borderColor: "#00ff41",
+                    color: "#00ff41",
+                  }}
                 >
-                  🔐 Sign with Ledger
+                  [SIGN_WITH_LEDGER]
                 </button>
+
+                <div
+                  className="terminal-dim"
+                  style={{
+                    fontSize: "0.8rem",
+                    marginTop: "1.5rem",
+                    letterSpacing: "0.1em",
+                  }}
+                >
+                  └───────────────────────────────────────────────────┘
+                </div>
               </div>
             )}
 
             {showLedger && decodedTx && (
-              <div className="bg-white rounded-2xl shadow-xl p-8">
-                <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-                  Ledger Device
+              <div
+                className="terminal-box"
+                style={{ padding: "2rem", border: "2px solid #00ff41" }}
+              >
+                <h2
+                  className="terminal-text terminal-glow"
+                  style={{
+                    fontSize: "1.5rem",
+                    fontWeight: "bold",
+                    marginBottom: "1.5rem",
+                    textAlign: "center",
+                  }}
+                >
+                  &gt;&gt; LEDGER DEVICE
                 </h2>
                 <LedgerSimulator
                   intent={decodedTx.intent}
@@ -477,20 +709,39 @@ export default function SignPage() {
             )}
 
             {signature && (
-              <div className="bg-white rounded-2xl shadow-xl p-8">
-                <h2 className="text-2xl font-bold mb-4 text-gray-800">
-                  ✅ Signed Transaction
+              <div
+                className="terminal-box"
+                style={{ padding: "2rem", border: "2px solid #00ff41" }}
+              >
+                <h2
+                  className="terminal-text terminal-glow"
+                  style={{
+                    fontSize: "1.25rem",
+                    fontWeight: "bold",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  &gt; SIGNED_TRANSACTION
                 </h2>
-                <div className="p-4 bg-green-50 border-2 border-green-200 rounded-lg">
-                  <div className="text-xs font-semibold text-gray-600 mb-2">
-                    Signature
+                <div style={{ padding: "1rem", border: "1px solid #00ff41" }}>
+                  <div
+                    className="terminal-dim"
+                    style={{ fontSize: "0.7rem", marginBottom: "0.5rem" }}
+                  >
+                    &gt; SIGNATURE
                   </div>
-                  <div className="text-sm font-mono text-gray-800 break-all">
+                  <div
+                    className="terminal-text"
+                    style={{ fontSize: "0.75rem", wordBreak: "break-all" }}
+                  >
                     {signature}
                   </div>
                 </div>
-                <div className="mt-4 text-sm text-gray-600">
-                  ✓ Transaction ready to broadcast to the network
+                <div
+                  className="terminal-cyan"
+                  style={{ marginTop: "1rem", fontSize: "0.85rem" }}
+                >
+                  &gt;&gt; READY_TO_BROADCAST
                 </div>
               </div>
             )}
@@ -498,25 +749,77 @@ export default function SignPage() {
         </div>
 
         {/* Info Section */}
-        <div className="mt-12 bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-8">
-          <div className="grid md:grid-cols-3 gap-6 text-gray-700">
+        <div
+          className="terminal-box"
+          style={{
+            marginTop: "3rem",
+            padding: "2rem",
+            border: "1px solid #004d1a",
+          }}
+        >
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(3, 1fr)",
+              gap: "2rem",
+            }}
+          >
             <div>
-              <h4 className="font-bold text-lg mb-2">ERC-7730 Standard</h4>
-              <p className="text-sm">
-                Human-readable transaction descriptions that work across all
-                dApps and wallets
+              <h4
+                className="terminal-text"
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "1rem",
+                  marginBottom: "0.5rem",
+                }}
+              >
+                &gt; ERC-7730
+              </h4>
+              <p className="terminal-dim" style={{ fontSize: "0.8rem" }}>
+                HUMAN-READABLE TX DESCRIPTIONS
               </p>
             </div>
             <div>
-              <h4 className="font-bold text-lg mb-2">Ledger Integration</h4>
-              <p className="text-sm">
-                Direct hardware wallet signing with WebUSB. Your keys never
-                leave the device
+              <h4
+                className="terminal-cyan"
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "1rem",
+                  marginBottom: "0.5rem",
+                }}
+              >
+                &gt; LEDGER INTEGRATION
+              </h4>
+              <p className="terminal-dim" style={{ fontSize: "0.8rem" }}>
+                DIRECT HARDWARE WALLET SIGNING VIA WEBUSB
+              </p>
+            </div>
+            <div>
+              <h4
+                className="terminal-amber"
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "1rem",
+                  marginBottom: "0.5rem",
+                }}
+              >
+                &gt; AIR-GAPPED SECURITY
+              </h4>
+              <p className="terminal-dim" style={{ fontSize: "0.8rem" }}>
+                KEYS NEVER LEAVE THE DEVICE
               </p>
             </div>
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @media (max-width: 1024px) {
+          div[style*="grid-template-columns: 1fr 1fr"] {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </main>
   );
 }

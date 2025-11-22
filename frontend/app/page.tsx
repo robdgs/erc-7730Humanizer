@@ -3,115 +3,321 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen" style={{ background: "#000000" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold mb-4 text-gradient">
-            ERC-7730 Transaction Decoder
+        {/* Hero Section */}
+        <div className="text-center mb-16">
+          <div
+            className="terminal-dim ascii-spinner"
+            style={{
+              fontSize: "0.75rem",
+              marginBottom: "1rem",
+              letterSpacing: "0.2em",
+            }}
+          >
+            INITIALIZING SYSTEM...
+          </div>
+          <h1
+            className="terminal-text terminal-glow"
+            style={{
+              fontSize: "3.5rem",
+              fontWeight: "bold",
+              marginBottom: "1rem",
+              letterSpacing: "0.15em",
+            }}
+          >
+            &gt;&gt; ERC-7730
           </h1>
-          <p className="text-xl text-gray-600 mb-2">
-            Human-readable transaction signing for any dApp
+          <h2
+            className="terminal-cyan"
+            style={{
+              fontSize: "2rem",
+              marginBottom: "0.5rem",
+              letterSpacing: "0.1em",
+            }}
+          >
+            HUMANIZER
+          </h2>
+          <p
+            className="terminal-amber"
+            style={{ fontSize: "1.1rem", marginBottom: "0.5rem" }}
+          >
+            SECURE SOVEREIGN TRANSACTION SIGNING
           </p>
-          <p className="text-sm text-gray-500 mb-4">
-            Built with Hardhat 3 • Next.js 14 • TypeScript
+          <p
+            className="terminal-dim"
+            style={{ fontSize: "0.8rem", marginBottom: "3rem" }}
+          >
+            LEDGER + MULTIBAAS + HARDHAT 3
           </p>
-          <div className="flex gap-4 justify-center">
-            <Link
-              href="/sign"
-              className="inline-block px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold rounded-lg transition-all"
+
+          {/* Three Path Choice */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(3, 1fr)",
+              gap: "1.5rem",
+              maxWidth: "1400px",
+              margin: "0 auto",
+            }}
+          >
+            {/* Path 1: Decoder */}
+            <div
+              className="terminal-box"
+              style={{
+                padding: "2rem",
+                border: "2px solid #00ff41",
+                textAlign: "left",
+              }}
             >
-              🔐 Try Hardware Signing
+              <div
+                className="terminal-text terminal-glow"
+                style={{
+                  fontSize: "1.5rem",
+                  fontWeight: "bold",
+                  marginBottom: "1rem",
+                }}
+              >
+                &gt; QUICK_DECODE
+              </div>
+              <p
+                className="terminal-dim"
+                style={{
+                  fontSize: "0.9rem",
+                  marginBottom: "1.5rem",
+                  lineHeight: "1.6",
+                }}
+              >
+                Paste raw transaction calldata and instantly see human-readable
+                preview with ERC-7730 formatting
+              </p>
+              <div
+                className="terminal-amber"
+                style={{
+                  fontSize: "0.75rem",
+                  marginBottom: "1rem",
+                  letterSpacing: "0.05em",
+                }}
+              >
+                ▸ PASTE CALLDATA
+                <br />
+                ▸ VIEW DECODED FIELDS
+                <br />▸ EXPORT FORMATTED OUTPUT
+              </div>
+            </div>
+
+            {/* Path 2: Dashboard */}
+            <Link href="/dashboard" style={{ textDecoration: "none" }}>
+              <div
+                className="terminal-box"
+                style={{
+                  padding: "2rem",
+                  border: "2px solid #00ffff",
+                  textAlign: "left",
+                  cursor: "pointer",
+                  transition: "all 0.3s",
+                }}
+              >
+                <div
+                  className="terminal-cyan terminal-glow"
+                  style={{
+                    fontSize: "1.5rem",
+                    fontWeight: "bold",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  &gt; ASSET_DASHBOARD
+                </div>
+                <p
+                  className="terminal-dim"
+                  style={{
+                    fontSize: "0.9rem",
+                    marginBottom: "1.5rem",
+                    lineHeight: "1.6",
+                  }}
+                >
+                  Connect wallet to view portfolio, governance votes, and
+                  vesting schedules with integrated signing
+                </p>
+                <div
+                  className="terminal-amber"
+                  style={{
+                    fontSize: "0.75rem",
+                    marginBottom: "1rem",
+                    letterSpacing: "0.05em",
+                  }}
+                >
+                  ▸ CONNECT METAMASK
+                  <br />
+                  ▸ VIEW TOKEN BALANCES
+                  <br />
+                  ▸ VOTE ON PROPOSALS
+                  <br />▸ CLAIM VESTED TOKENS
+                </div>
+              </div>
             </Link>
-            <Link
-              href="/dashboard"
-              className="inline-block px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-lg transition-all"
-            >
-              📊 Asset Dashboard
+
+            {/* Path 3: Create Descriptor */}
+            <Link href="/create" style={{ textDecoration: "none" }}>
+              <div
+                className="terminal-box"
+                style={{
+                  padding: "2rem",
+                  border: "2px solid #ffb000",
+                  textAlign: "left",
+                  cursor: "pointer",
+                  transition: "all 0.3s",
+                }}
+              >
+                <div
+                  className="terminal-amber terminal-glow"
+                  style={{
+                    fontSize: "1.5rem",
+                    fontWeight: "bold",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  &gt; CREATE_DESCRIPTOR
+                </div>
+                <p
+                  className="terminal-dim"
+                  style={{
+                    fontSize: "0.9rem",
+                    marginBottom: "1.5rem",
+                    lineHeight: "1.6",
+                  }}
+                >
+                  Generate ERC-7730 JSON descriptors for your smart contracts
+                  with custom formatting rules
+                </p>
+                <div
+                  className="terminal-amber"
+                  style={{
+                    fontSize: "0.75rem",
+                    marginBottom: "1rem",
+                    letterSpacing: "0.05em",
+                  }}
+                >
+                  ▸ PASTE CONTRACT ABI
+                  <br />
+                  ▸ CONFIGURE FIELDS
+                  <br />
+                  ▸ DOWNLOAD DESCRIPTOR
+                  <br />▸ USE WITH LEDGER
+                </div>
+              </div>
             </Link>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
-          <div className="mb-6">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-3">
-              🎯 Hackathon Demo
-            </h2>
-            <div className="grid md:grid-cols-3 gap-4 text-sm">
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <div className="font-semibold text-blue-900 mb-1">
-                  Smart Contract
-                </div>
-                <div className="text-blue-700">
-                  DemoRouter with swap & liquidity functions
-                </div>
-              </div>
-              <div className="bg-purple-50 p-4 rounded-lg">
-                <div className="font-semibold text-purple-900 mb-1">
-                  ERC-7730 Descriptor
-                </div>
-                <div className="text-purple-700">
-                  Human-readable field labels & formatting
-                </div>
-              </div>
-              <div className="bg-green-50 p-4 rounded-lg">
-                <div className="font-semibold text-green-900 mb-1">
-                  Hardhat 3 Backend
-                </div>
-                <div className="text-green-700">
-                  Network simulation & mainnet forking
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Decoder Section */}
 
         <CalldataDecoder />
 
-        <div className="mt-12 bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8">
-          <h3 className="text-2xl font-semibold text-gray-800 mb-4">
-            📚 How It Works
+        {/* Tech Stack Footer */}
+        <div
+          className="terminal-box"
+          style={{
+            marginTop: "3rem",
+            padding: "2rem",
+            border: "1px solid #004d1a",
+          }}
+        >
+          <h3
+            className="terminal-text"
+            style={{
+              fontSize: "1.25rem",
+              fontWeight: 600,
+              marginBottom: "1.5rem",
+              letterSpacing: "0.1em",
+            }}
+          >
+            &gt; ARCHITECTURE
           </h3>
-          <div className="grid md:grid-cols-2 gap-6 text-gray-700">
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gap: "1.5rem",
+            }}
+          >
             <div>
-              <h4 className="font-semibold text-lg mb-2">
-                1. Smart Contract Development
+              <h4
+                className="terminal-cyan"
+                style={{
+                  fontWeight: 600,
+                  fontSize: "0.95rem",
+                  marginBottom: "0.5rem",
+                  letterSpacing: "0.05em",
+                }}
+              >
+                [1] ERC-7730 STANDARD
               </h4>
-              <p className="text-sm">
-                DemoRouter.sol is compiled and deployed using Hardhat 3 with
-                mainnet forking enabled. The contract includes swap and
-                liquidity functions with complex struct parameters.
+              <p
+                className="terminal-dim"
+                style={{ fontSize: "0.8rem", lineHeight: "1.6" }}
+              >
+                Transform raw calldata into human-readable previews with
+                standardized descriptors
               </p>
             </div>
             <div>
-              <h4 className="font-semibold text-lg mb-2">
-                2. ERC-7730 Descriptor Generation
+              <h4
+                className="terminal-cyan"
+                style={{
+                  fontWeight: 600,
+                  fontSize: "0.95rem",
+                  marginBottom: "0.5rem",
+                  letterSpacing: "0.05em",
+                }}
+              >
+                [2] LEDGER INTEGRATION
               </h4>
-              <p className="text-sm">
-                A TypeScript script parses the contract ABI and generates an
-                ERC-7730 descriptor with human-readable labels and formatting
-                rules for each function parameter.
+              <p
+                className="terminal-dim"
+                style={{ fontSize: "0.8rem", lineHeight: "1.6" }}
+              >
+                Hardware wallet signing via WebUSB with visual simulator for
+                testing
               </p>
             </div>
             <div>
-              <h4 className="font-semibold text-lg mb-2">
-                3. Calldata Encoding
+              <h4
+                className="terminal-cyan"
+                style={{
+                  fontWeight: 600,
+                  fontSize: "0.95rem",
+                  marginBottom: "0.5rem",
+                  letterSpacing: "0.05em",
+                }}
+              >
+                [3] MULTIBAAS DASHBOARD
               </h4>
-              <p className="text-sm">
-                Transaction calldata is encoded using ethers.js Interface. This
-                raw hex data represents the function call and parameters that
-                would be sent on-chain.
+              <p
+                className="terminal-dim"
+                style={{ fontSize: "0.8rem", lineHeight: "1.6" }}
+              >
+                Portfolio tracking, governance, and vesting with integrated
+                signing flow
               </p>
             </div>
-            <div>
-              <h4 className="font-semibold text-lg mb-2">
-                4. Human-Readable Display
-              </h4>
-              <p className="text-sm">
-                The decoder uses the ERC-7730 descriptor to transform raw
-                calldata into a beautiful, understandable preview showing
-                exactly what the transaction will do.
-              </p>
-            </div>
+          </div>
+        </div>
+
+        <div
+          className="terminal-box"
+          style={{
+            marginTop: "2rem",
+            padding: "1rem",
+            border: "1px solid #004d1a",
+            textAlign: "center",
+          }}
+        >
+          <div
+            className="terminal-dim ascii-spinner"
+            style={{ fontSize: "0.75rem", letterSpacing: "0.1em" }}
+          >
+            SYSTEM STATUS: OPERATIONAL
           </div>
         </div>
       </div>

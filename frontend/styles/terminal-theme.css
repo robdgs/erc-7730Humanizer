@@ -1,0 +1,492 @@
+/* ========================================
+   HACKER TERMINAL THEME
+   Cyberpunk / Matrix / CRT Console Style
+   ======================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap");
+
+:root {
+  /* Core Terminal Colors */
+  --terminal-bg: #000000;
+  --terminal-bg-alt: #0a0a0a;
+  --terminal-text: #00ff41;
+  --terminal-text-alt: #00cc33;
+  --terminal-cyan: #00ffff;
+  --terminal-amber: #ffb000;
+  --terminal-red: #ff0040;
+  --terminal-dim: #004d1a;
+  --terminal-glow: #00ff41;
+
+  /* Status Colors */
+  --status-online: #00ff41;
+  --status-warning: #ffb000;
+  --status-error: #ff0040;
+  --status-offline: #666666;
+
+  /* Border & Effects */
+  --border-color: #00ff41;
+  --border-dim: #004d1a;
+  --scanline-color: rgba(0, 255, 65, 0.03);
+  --glow-strength: 0 0 5px var(--terminal-glow), 0 0 10px var(--terminal-glow);
+  --glow-strong: 0 0 10px var(--terminal-glow), 0 0 20px var(--terminal-glow),
+    0 0 30px var(--terminal-glow);
+}
+
+/* ========================================
+   GLOBAL TERMINAL STYLES
+   ======================================== */
+
+body {
+  font-family: "JetBrains Mono", "Fira Code", "Source Code Pro", monospace !important;
+  background: var(--terminal-bg);
+  color: var(--terminal-text);
+  overflow-x: hidden;
+}
+
+* {
+  font-family: "JetBrains Mono", "Fira Code", "Source Code Pro", monospace !important;
+}
+
+/* Scanlines overlay */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 255, 65, 0.03) 0px,
+    transparent 1px,
+    transparent 2px,
+    rgba(0, 255, 65, 0.03) 3px
+  );
+  z-index: 9999;
+  animation: scanline 8s linear infinite;
+}
+
+/* CRT Flicker */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  background: rgba(0, 255, 65, 0.01);
+  z-index: 9998;
+  animation: flicker 0.15s infinite;
+}
+
+/* ========================================
+   KEYFRAME ANIMATIONS
+   ======================================== */
+
+@keyframes flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.98;
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes cursor-blink {
+  0%,
+  49% {
+    border-right-color: var(--terminal-text);
+  }
+  50%,
+  100% {
+    border-right-color: transparent;
+  }
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spinner {
+  0% {
+    content: "|";
+  }
+  25% {
+    content: "/";
+  }
+  50% {
+    content: "—";
+  }
+  75% {
+    content: "\\";
+  }
+  100% {
+    content: "|";
+  }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+.terminal-text {
+  color: var(--terminal-text);
+}
+
+.terminal-cyan {
+  color: var(--terminal-cyan);
+}
+
+.terminal-amber {
+  color: var(--terminal-amber);
+}
+
+.terminal-red {
+  color: var(--terminal-red);
+}
+
+.terminal-glow {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.terminal-blink {
+  animation: blink 1s step-end infinite;
+}
+
+.terminal-border {
+  border: 2px solid var(--border-color);
+  box-shadow: 0 0 5px var(--terminal-glow), inset 0 0 5px rgba(0, 255, 65, 0.1);
+}
+
+.terminal-box {
+  background: var(--terminal-bg-alt);
+  border: 1px solid var(--border-dim);
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.2),
+    inset 0 0 20px rgba(0, 255, 65, 0.05);
+}
+
+.terminal-button {
+  background: var(--terminal-bg);
+  border: 2px solid var(--terminal-text);
+  color: var(--terminal-text);
+  padding: 0.5rem 1.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.terminal-button:hover {
+  background: var(--terminal-bg);
+  color: var(--terminal-text);
+  transform: translateY(-2px);
+}
+
+.terminal-button:active {
+  transform: translateY(0);
+}
+
+.terminal-input {
+  background: var(--terminal-bg);
+  border: 1px solid var(--border-dim);
+  color: var(--terminal-text);
+  padding: 0.75rem;
+  font-family: "JetBrains Mono", monospace;
+  caret-color: var(--terminal-text);
+}
+
+.terminal-input:focus {
+  outline: none;
+  border-color: var(--terminal-text);
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+}
+
+.terminal-prompt::before {
+  content: "> ";
+  color: var(--terminal-text);
+}
+
+.terminal-cursor::after {
+  content: "▋";
+  animation: cursor-blink 1s step-end infinite;
+  margin-left: 2px;
+}
+
+.terminal-ascii-border {
+  border: 2px solid var(--border-dim);
+  position: relative;
+  padding: 1rem;
+}
+
+.terminal-ascii-border::before {
+  content: "┌─────────────────────────────────┐";
+  position: absolute;
+  top: -12px;
+  left: 0;
+  font-size: 10px;
+  color: var(--border-dim);
+}
+
+.terminal-ascii-border::after {
+  content: "└─────────────────────────────────┘";
+  position: absolute;
+  bottom: -12px;
+  left: 0;
+  font-size: 10px;
+  color: var(--border-dim);
+}
+
+.typing-effect {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid var(--terminal-text);
+  animation: typing 2s steps(40) forwards, cursor-blink 0.75s step-end infinite;
+}
+
+.glitch-effect:hover {
+  animation: glitch 0.3s ease-in-out;
+}
+
+.ascii-spinner::before {
+  content: "|";
+  animation: spinner 0.5s linear infinite;
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
+/* ========================================
+   COMPONENT OVERRIDES
+   ======================================== */
+
+/* Remove default Tailwind styles that conflict */
+.bg-white {
+  background: var(--terminal-bg-alt) !important;
+}
+
+.bg-gray-50,
+.bg-gray-100 {
+  background: var(--terminal-bg) !important;
+}
+
+.text-gray-800,
+.text-gray-900 {
+  color: var(--terminal-text) !important;
+}
+
+.text-gray-600,
+.text-gray-700 {
+  color: var(--terminal-text-alt) !important;
+}
+
+.text-gray-500 {
+  color: var(--terminal-dim) !important;
+}
+
+.border-gray-200,
+.border-gray-300 {
+  border-color: var(--border-dim) !important;
+}
+
+/* Gradients become terminal themed */
+.bg-gradient-to-r,
+.bg-gradient-to-br {
+  background: var(--terminal-bg-alt) !important;
+  border: 1px solid var(--border-dim);
+}
+
+.text-gradient {
+  color: var(--terminal-text) !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+}
+
+/* Shadows */
+.shadow-xl,
+.shadow-lg {
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.2),
+    inset 0 0 30px rgba(0, 255, 65, 0.05) !important;
+}
+
+/* Rounded corners - keep some but less pronounced */
+.rounded-2xl {
+  border-radius: 4px !important;
+}
+
+.rounded-xl,
+.rounded-lg {
+  border-radius: 2px !important;
+}
+
+/* ========================================
+   STATUS INDICATORS
+   ======================================== */
+
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+.status-indicator::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: blink 2s ease-in-out infinite;
+}
+
+.status-online::before {
+  background: var(--status-online);
+  box-shadow: 0 0 10px var(--status-online);
+}
+
+.status-warning::before {
+  background: var(--status-warning);
+  box-shadow: 0 0 10px var(--status-warning);
+}
+
+.status-error::before {
+  background: var(--status-error);
+  box-shadow: 0 0 10px var(--status-error);
+}
+
+.status-offline::before {
+  background: var(--status-offline);
+}
+
+/* ========================================
+   LOADING STATES
+   ======================================== */
+
+.terminal-loading {
+  display: inline-block;
+}
+
+.terminal-loading::after {
+  content: "...";
+  animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+  0%,
+  20% {
+    content: ".";
+  }
+  40% {
+    content: "..";
+  }
+  60%,
+  100% {
+    content: "...";
+  }
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+  body::before {
+    animation: scanline 4s linear infinite;
+  }
+
+  .terminal-ascii-border::before,
+  .terminal-ascii-border::after {
+    display: none;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  body::before,
+  body::after {
+    display: none;
+  }
+}
