@@ -29,8 +29,23 @@ export default function TokenTable({ tokens, onAction }: TokenTableProps) {
 
     // Raw BigInt format - convert properly
     try {
-      const value = BigInt(balance) / BigInt(10 ** decimals);
-      return value.toString();
+      const balanceBigInt = BigInt(balance);
+      const divisor = BigInt(10 ** decimals);
+
+      // Get integer and fractional parts
+      const integerPart = balanceBigInt / divisor;
+      const remainder = balanceBigInt % divisor;
+
+      // Convert remainder to decimal string
+      const fractionalPart = remainder.toString().padStart(decimals, "0");
+
+      // Combine and parse as float for formatting
+      const fullValue = parseFloat(`${integerPart}.${fractionalPart}`);
+
+      return fullValue.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 6,
+      });
     } catch {
       // Fallback if conversion fails
       return balance;

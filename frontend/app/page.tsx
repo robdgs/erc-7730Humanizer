@@ -44,7 +44,7 @@ export default function Home() {
               letterSpacing: "0.1em",
             }}
           >
-            HUMANIZER
+            HOOMANIFI
           </h2>
           <p
             className="terminal-amber"
