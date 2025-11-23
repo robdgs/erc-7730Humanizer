@@ -34,7 +34,7 @@ export default function Home() {
               letterSpacing: "0.15em",
             }}
           >
-            &gt;&gt;HOOMANIFI 
+            HOOMANIFI 
           </h1>
           <h2
             className="terminal-cyan"
@@ -44,7 +44,7 @@ export default function Home() {
               letterSpacing: "0.1em",
             }}
           >
-            ERC-7730
+            &gt;&gt; ERC-7730
           </h2>
           <p
             className="terminal-amber"
