@@ -444,7 +444,7 @@ export default function SignPage() {
             {/* Ledger Connection */}
             <div
               className="terminal-box"
-              style={{ padding: "2rem", border: "1px solid #00ffff" }}
+              style={{ padding: "2rem", border: "1px solid #ff00ff" }}
             >
               <h2
                 className="terminal-cyan"
@@ -516,7 +516,7 @@ export default function SignPage() {
             {error && (
               <div
                 className="terminal-box"
-                style={{ padding: "1.5rem", border: "2px solid #ff0040" }}
+                style={{ padding: "1.5rem", border: "2px solid #ff00ff" }}
               >
                 <p className="terminal-red" style={{ fontWeight: 600 }}>
                   &gt;&gt; ERROR: {error}
@@ -527,7 +527,7 @@ export default function SignPage() {
             {decodedTx && (
               <div
                 className="terminal-box"
-                style={{ padding: "2rem", border: "2px solid #00ffff" }}
+                style={{ padding: "2rem", border: "2px solid #ff00ff" }}
               >
                 <div
                   className="terminal-dim"

@@ -1,10 +1,18 @@
 import CalldataDecoder from "@/components/CalldataDecoder";
+import MatrixBackground from "@/components/MatrixBackground";
 import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="min-h-screen" style={{ background: "#000000" }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <main
+      className="min-h-screen"
+      style={{ background: "#000000", position: "relative" }}
+    >
+      <MatrixBackground />
+      <div
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
+        style={{ position: "relative", zIndex: 1 }}
+      >
         {/* Hero Section */}
         <div className="text-center mb-16">
           <div
@@ -112,7 +120,7 @@ export default function Home() {
                 className="terminal-box"
                 style={{
                   padding: "2rem",
-                  border: "2px solid #00ffff",
+                  border: "2px solid #ff00ff",
                   textAlign: "left",
                   cursor: "pointer",
                   transition: "all 0.3s",
@@ -163,7 +171,7 @@ export default function Home() {
                 className="terminal-box"
                 style={{
                   padding: "2rem",
-                  border: "2px solid #ffb000",
+                  border: "2px solid #00ff41",
                   textAlign: "left",
                   cursor: "pointer",
                   transition: "all 0.3s",

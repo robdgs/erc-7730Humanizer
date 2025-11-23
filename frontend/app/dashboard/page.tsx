@@ -6,6 +6,7 @@ import { useDashboard } from "@/hooks/useDashboard";
 import { ConnectButton } from "@/components/wallet/ConnectButton";
 import { AddressDisplay } from "@/components/wallet/AddressDisplay";
 import { SigningModal } from "@/components/signing/SigningModal";
+import MatrixBackground from "@/components/MatrixBackground";
 import PortfolioCard from "@/components/PortfolioCard";
 import TokenTable from "@/components/TokenTable";
 import DAOVotes from "@/components/DAOVotes";
@@ -39,6 +40,7 @@ export default function DashboardPage() {
     forceMock || useManualAddress
   );
   const [txToSign, setTxToSign] = useState<FormattedTransaction | null>(null);
+  const [useLedgerForSigning, setUseLedgerForSigning] = useState(false);
 
   // Build transaction for signing
   const buildTransaction = async (
@@ -100,8 +102,15 @@ export default function DashboardPage() {
   };
 
   return (
-    <main className="min-h-screen" style={{ background: "#000000" }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <main
+      className="min-h-screen"
+      style={{ background: "#000000", position: "relative" }}
+    >
+      <MatrixBackground />
+      <div
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
+        style={{ position: "relative", zIndex: 1 }}
+      >
         {/* Header */}
         <div className="mb-8">
           <div
@@ -294,7 +303,7 @@ export default function DashboardPage() {
                         }}
                       />
                       <span
-                        className="terminal-amber"
+                        className="terminal-green"
                         style={{ fontSize: "0.8rem" }}
                       >
                         USE_MOCK_DATA
@@ -340,6 +349,58 @@ export default function DashboardPage() {
                     [MOCK_MODE]
                   </span>
                 )}
+                <label
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    cursor: "pointer",
+                    marginLeft: "auto",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "16px",
+                      height: "16px",
+                      border: "2px solid #ff00ff",
+                      background: useLedgerForSigning
+                        ? "#ff00ff"
+                        : "transparent",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {useLedgerForSigning && (
+                      <span
+                        style={{
+                          color: "#000",
+                          fontSize: "12px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        ✓
+                      </span>
+                    )}
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={useLedgerForSigning}
+                    onChange={(e) => setUseLedgerForSigning(e.target.checked)}
+                    style={{
+                      position: "absolute",
+                      opacity: 0,
+                      pointerEvents: "none",
+                    }}
+                  />
+                  <span
+                    className="terminal-cyan"
+                    style={{ fontSize: "0.8rem" }}
+                  >
+                    🔐 USE_LEDGER_DEVICE
+                  </span>
+                </label>
               </div>
             </div>
 
@@ -521,6 +582,7 @@ export default function DashboardPage() {
             console.log("Transaction signed:", sig);
             setTxToSign(null);
           }}
+          useLedgerDevice={useLedgerForSigning}
         />
       )}
     </main>

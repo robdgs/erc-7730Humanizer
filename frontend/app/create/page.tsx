@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import MatrixBackground from "@/components/MatrixBackground";
 
 export default function CreateDescriptorPage() {
   const [abiInput, setAbiInput] = useState("");
@@ -130,8 +131,15 @@ export default function CreateDescriptorPage() {
   };
 
   return (
-    <main className="min-h-screen" style={{ background: "#000000" }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <main
+      className="min-h-screen"
+      style={{ background: "#000000", position: "relative" }}
+    >
+      <MatrixBackground />
+      <div
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
+        style={{ position: "relative", zIndex: 1 }}
+      >
         {/* Header */}
         <div className="mb-8">
           <div
@@ -189,8 +197,8 @@ export default function CreateDescriptorPage() {
                   style={{
                     padding: "0.5rem 1rem",
                     fontSize: "0.8rem",
-                    borderColor: "#00ffff",
-                    color: "#00ffff",
+                    borderColor: "#ff00ff",
+                    color: "#ff00ff",
                   }}
                 >
                   [LOAD_EXAMPLE_ABI]
@@ -305,8 +313,8 @@ export default function CreateDescriptorPage() {
                     flex: 1,
                     padding: "1rem",
                     fontSize: "1rem",
-                    borderColor: "#00ffff",
-                    color: "#00ffff",
+                    borderColor: "#ff00ff",
+                    color: "#ff00ff",
                   }}
                 >
                   [DOWNLOAD_JSON]
