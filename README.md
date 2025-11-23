@@ -180,6 +180,7 @@ const { address, provider, connect, isConnected } = useWallet();
 ```
 
 Features:
+
 - Singleton pattern for consistent state
 - Automatic reconnection on page load
 - Account change listeners
@@ -192,13 +193,14 @@ All services follow the same pattern:
 ```typescript
 // Automatic fallback to mock data
 async function getPortfolio(
-  address: string, 
+  address: string,
   provider?: Provider,
   forceMock?: boolean
-): Promise<Portfolio>
+): Promise<Portfolio>;
 ```
 
 Services:
+
 - `portfolio.ts` - Token balances with Web3 provider
 - `governance.ts` - DAO proposals and voting power
 - `vesting.ts` - Claimable tokens and schedules
@@ -206,6 +208,7 @@ Services:
 **3. ERC-7730 Utilities** (`core/erc7730/`)
 
 Modular implementation:
+
 - `parser.ts` - Descriptor loading and validation
 - `formatter.ts` - Human-readable formatting
 - `types.ts` - Shared TypeScript definitions
@@ -394,6 +397,7 @@ struct SwapParams {
 - **Asset Dashboard**: Full portfolio management interface
 
 Features:
+
 - Visual card navigation
 - Tech stack overview
 - GitHub/demo links
@@ -413,6 +417,7 @@ Features:
 5. Use with Ledger for human-readable signing
 
 **Example Use Case:**
+
 ```
 Input: Contract ABI from Etherscan
 Output: Complete ERC-7730 descriptor with:
@@ -611,17 +616,20 @@ Users sign transactions blindly, seeing only raw hex data. This leads to:
 ### Architecture Highlights
 
 **Centralized Wallet Management:**
+
 - Single `WalletManager` class in `core/wallet.ts`
 - React hook `useWallet()` for components
 - Automatic reconnection on page refresh
 - Account change listeners built-in
 
 **Unified Data Services:**
+
 - Automatic fallback to mock data on errors
 - Single service function per feature (`getPortfolio`, `getDaoVotes`, `getVestingSchedules`)
 - Real Web3 integration with mock testing support
 
 **Integrated Signing Flow:**
+
 - `SigningModal` component used across all pages
 - Three-step flow: preview → ledger → signed
 - Dashboard actions automatically trigger modal
@@ -956,8 +964,4 @@ MIT License - see LICENSE file
 - **Hardhat Team** - Smart contract development tools
 - **MultiBaAS by Curvegrid** - Enterprise blockchain infrastructure
 
-*Last updated: November 2025*
-
-
-
-
+_Last updated: November 2025_
