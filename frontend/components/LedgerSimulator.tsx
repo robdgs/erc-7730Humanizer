@@ -171,7 +171,7 @@ export default function LedgerSimulator({
         <button
           onClick={handleReject}
           className="terminal-button"
-          style={{ borderColor: "#ff0040", color: "#ff0040" }}
+          style={{ borderColor: "#ff00ff", color: "#ff00ff" }}
         >
           [ REJECT ]
         </button>
@@ -202,7 +202,7 @@ export default function LedgerSimulator({
         }
 
         .ledger-device.rejected {
-          border-color: #ff0040;
+          border-color: #ff00ff;
           box-shadow: 0 0 30px rgba(255, 0, 64, 0.5),
             inset 0 0 30px rgba(255, 0, 64, 0.1);
         }

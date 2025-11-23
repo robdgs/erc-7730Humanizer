@@ -180,7 +180,7 @@ export default function CalldataDecoder() {
           style={{
             marginBottom: "1.5rem",
             padding: "1rem",
-            border: "1px solid #ff0040",
+            border: "1px solid #ff00ff",
             fontSize: "0.85rem",
           }}
         >

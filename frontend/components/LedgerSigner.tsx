@@ -98,33 +98,91 @@ export default function LedgerSigner({
         <button
           onClick={connectLedger}
           disabled={isConnecting}
-          className="connect-button"
+          className="terminal-button"
+          style={{
+            width: "100%",
+            padding: "1rem 1.5rem",
+            fontSize: "0.9rem",
+            borderColor: "#ff00ff",
+            color: "#ff00ff",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "0.75rem",
+            letterSpacing: "0.1em",
+          }}
         >
           {isConnecting ? (
-            <span className="flex items-center gap-2">
-              <span className="spinner"></span>
-              Connecting to Ledger...
-            </span>
+            <>
+              <span
+                className="ascii-spinner"
+                style={{ margin: 0, fontSize: "1rem" }}
+              ></span>
+              <span>CONNECTING_TO_LEDGER</span>
+            </>
           ) : (
-            <span className="flex items-center gap-2">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M19.5 9.5h-4v-4h4m0 15h-4v-4h4m-15 0h4v4h-4m0-15h4v4h-4" />
-              </svg>
-              Connect Ledger Device
-            </span>
+            <>
+              <span style={{ fontSize: "1.2rem" }}>🔐</span>
+              <span>[CONNECT_LEDGER_DEVICE]</span>
+            </>
           )}
         </button>
       ) : (
-        <div className="connected-status">
-          <div className="status-indicator">
-            <div className="status-dot"></div>
-            <span className="status-text">Ledger Connected</span>
+        <div
+          className="terminal-box"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "1rem",
+            border: "2px solid #00ff41",
+            gap: "1rem",
+            flexWrap: "wrap",
+          }}
+        >
+          <div
+            style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}
+          >
+            <div
+              style={{
+                width: "10px",
+                height: "10px",
+                background: "#00ff41",
+                borderRadius: "50%",
+                boxShadow: "0 0 10px #00ff41",
+                animation: "blink 2s ease-in-out infinite",
+              }}
+            ></div>
+            <span
+              className="terminal-text"
+              style={{ fontSize: "0.85rem", fontWeight: 600 }}
+            >
+              LEDGER_CONNECTED
+            </span>
           </div>
-          <div className="address-display">
+          <div
+            className="terminal-cyan"
+            style={{
+              fontFamily: "monospace",
+              fontSize: "0.85rem",
+              padding: "0.5rem 1rem",
+              border: "1px solid #004d1a",
+              background: "#000",
+            }}
+          >
             {address.slice(0, 6)}...{address.slice(-4)}
           </div>
-          <button onClick={disconnectLedger} className="disconnect-button">
-            Disconnect
+          <button
+            onClick={disconnectLedger}
+            className="terminal-button"
+            style={{
+              padding: "0.5rem 1rem",
+              fontSize: "0.75rem",
+              borderColor: "#ff0040",
+              color: "#ff0040",
+            }}
+          >
+            [DISCONNECT]
           </button>
         </div>
       )}
@@ -134,107 +192,22 @@ export default function LedgerSigner({
           width: 100%;
         }
 
-        .connect-button {
-          width: 100%;
-          padding: 16px 24px;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-          border: none;
-          border-radius: 12px;
-          font-size: 16px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .connect-button:hover:not(:disabled) {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
-        }
-
-        .connect-button:disabled {
-          opacity: 0.7;
-          cursor: not-allowed;
-        }
-
-        .spinner {
-          width: 16px;
-          height: 16px;
-          border: 2px solid rgba(255, 255, 255, 0.3);
-          border-top-color: white;
-          border-radius: 50%;
-          animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-          to {
-            transform: rotate(360deg);
-          }
-        }
-
-        .connected-status {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 16px;
-          background: #f0fdf4;
-          border: 2px solid #10b981;
-          border-radius: 12px;
-        }
-
-        .status-indicator {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-
-        .status-dot {
-          width: 10px;
-          height: 10px;
-          background: #10b981;
-          border-radius: 50%;
-          animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
+        @keyframes blink {
           0%,
-          100% {
+          49% {
             opacity: 1;
           }
-          50% {
-            opacity: 0.5;
+          50%,
+          100% {
+            opacity: 0.3;
           }
         }
 
-        .status-text {
-          font-weight: 600;
-          color: #065f46;
-        }
-
-        .address-display {
-          font-family: "Courier New", monospace;
-          font-size: 14px;
-          color: #065f46;
-          background: white;
-          padding: 6px 12px;
-          border-radius: 6px;
-        }
-
-        .disconnect-button {
-          padding: 8px 16px;
-          background: white;
-          border: 2px solid #10b981;
-          color: #065f46;
-          border-radius: 8px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.2s;
-        }
-
-        .disconnect-button:hover {
-          background: #10b981;
-          color: white;
+        @media (max-width: 640px) {
+          .terminal-box {
+            flex-direction: column;
+            align-items: stretch !important;
+          }
         }
       `}</style>
     </div>

@@ -72,7 +72,7 @@ export default function DAOVotes({
     <div className="space-y-4">
       <div
         className="terminal-box"
-        style={{ padding: "1rem", border: "2px solid #00ffff" }}
+        style={{ padding: "1rem", border: "2px solid #ff00ff" }}
       >
         <div
           style={{
@@ -120,7 +120,7 @@ export default function DAOVotes({
 
         const statusColors: Record<string, string> = {
           active: "#00ff41",
-          passed: "#00ffff",
+          passed: "#ff00ff",
           rejected: "#ff0040",
           pending: "#666666",
         };
@@ -235,8 +235,8 @@ export default function DAOVotes({
                     style={{
                       padding: "0.4rem 1rem",
                       fontSize: "0.75rem",
-                      borderColor: "#ff0040",
-                      color: "#ff0040",
+                      borderColor: "#ff00ff",
+                      color: "#ff00ff",
                     }}
                   >
                     [AGAINST]

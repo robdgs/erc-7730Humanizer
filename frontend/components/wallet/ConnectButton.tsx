@@ -31,8 +31,8 @@ export function ConnectButton({
       style={{
         padding: "0.75rem 2rem",
         fontSize: "0.9rem",
-        borderColor: "#00ffff",
-        color: "#00ffff",
+        borderColor: "#ff00ff",
+        color: "#ff00ff",
         opacity: disabled || isConnecting ? 0.5 : 1,
         cursor: disabled || isConnecting ? "not-allowed" : "pointer",
       }}

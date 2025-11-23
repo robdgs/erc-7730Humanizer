@@ -194,10 +194,10 @@ export default function TokenTable({ tokens, onAction }: TokenTableProps) {
                     onClick={() => onAction?.(token, "swap")}
                     className="terminal-button"
                     style={{
-                      padding: "0.25rem 0.75rem",
-                      fontSize: "0.7rem",
-                      borderColor: "#00ffff",
-                      color: "#00ffff",
+                      padding: "0.5rem 1rem",
+                      fontSize: "0.75rem",
+                      borderColor: "#ff00ff",
+                      color: "#ff00ff",
                     }}
                   >
                     [SWAP]
