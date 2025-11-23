@@ -39,7 +39,7 @@ export async function getDaoVotes(address: string): Promise<UserVotes> {
         title: "Increase Treasury Allocation for Development",
         description:
           "Proposal to allocate 15% more funds to development initiatives",
-        status: "active",
+        status: "active" as const,
         votesFor: String(
           BigInt(Math.floor(3000 + seed * 0.5)) * BigInt(10 ** 18)
         ),
@@ -54,7 +54,7 @@ export async function getDaoVotes(address: string): Promise<UserVotes> {
         id: "0x2",
         title: "Update Governance Parameters",
         description: "Reduce voting period from 7 days to 5 days",
-        status: "active",
+        status: "active" as const,
         votesFor: String(
           BigInt(Math.floor(2000 + seed * 0.3)) * BigInt(10 ** 18)
         ),
@@ -69,7 +69,7 @@ export async function getDaoVotes(address: string): Promise<UserVotes> {
         id: "0x3",
         title: "Add New Token to Liquidity Pool",
         description: "Proposal to add LINK token to the main liquidity pool",
-        status: "passed",
+        status: "passed" as const,
         votesFor: String(
           BigInt(Math.floor(5000 + seed * 0.7)) * BigInt(10 ** 18)
         ),
@@ -83,7 +83,9 @@ export async function getDaoVotes(address: string): Promise<UserVotes> {
         id: "0x4",
         title: "Grant Protocol Upgrade Permissions",
         description: "Allow multisig to upgrade protocol contracts",
-        status: seed % 2 === 0 ? "active" : "rejected",
+        status: (seed % 2 === 0 ? "active" : "rejected") as
+          | "active"
+          | "rejected",
         votesFor: String(
           BigInt(Math.floor(1500 + seed * 0.4)) * BigInt(10 ** 18)
         ),
